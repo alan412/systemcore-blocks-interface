@@ -193,7 +193,10 @@ const CLASS_METHOD_DEF = {
         }
         this.mrcUpdateParams();
         if (this.mrcCanBeCalledWithinClass) {
-          mutateMethodCallers(this.workspace, this.id, this.getMethodForWithin());
+          const methodForWithin = this.getMethodForWithin();
+          if (methodForWithin) {
+            mutateMethodCallers(this.workspace, this.id, methodForWithin);
+          }
         }
     },
     decompose: function (this: ClassMethodDefBlock, workspace: Blockly.Workspace) {
@@ -267,7 +270,7 @@ const CLASS_METHOD_DEF = {
         const method = {
             blockId: this.id,
             visibleName: this.getFieldValue(FIELD_METHOD_NAME),
-            pythonName: this.mrcFuncName,
+            pythonName: this.mrcFuncName ? this.mrcFuncName : '',
             returnType: this.mrcReturnType,
             args: [{
                 name: 'self',
@@ -275,7 +278,7 @@ const CLASS_METHOD_DEF = {
             }],
         };
         if (!method.pythonName) {
-            method.pythonName = method.visibleName;
+            method.pythonName = method.visibleName as string;
         }
         this.mrcParameters.forEach(param => {
             method.args.push({
