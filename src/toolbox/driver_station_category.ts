@@ -1,6 +1,9 @@
 import { Editor } from '../editor/editor';
 import * as toolboxItems from './items';
 import * as Blockly from 'blockly/core';
+import { BLOCK_NAME as MRC_OPMODE_DETAILS } from '../blocks/mrc_opmode_details';
+import { BLOCK_NAME as MRC_CONTROLLER } from '../blocks/mrc_controller';
+import { findConnectedBlocksOfType } from '../blocks/utils/find_connected_blocks';
 
 
 export function getDriverStationCategory(editor: Editor): toolboxItems.Category {
@@ -37,13 +40,33 @@ export function getDriverStationCategory(editor: Editor): toolboxItems.Category 
 
 /**
  * Get all controllers from the project
- * TODO: Implement actual controller retrieval from the project storage
  */
-function getControllersFromProject(_editor: Editor): toolboxItems.Category[] {
-  // Placeholder - replace with actual implementation
-  // This should retrieve controllers from the project/editor storage
-  // For now, return empty array
-  return [];
+function getControllersFromProject(editor: Editor): toolboxItems.Category[] {
+  const workspace = editor.getBlocklyWorkspace();
+  const categories: toolboxItems.Category[] = [];
+  
+  // Find the mrc_opmode_details block
+  const opmodeDetailsBlocks = workspace.getBlocksByType(MRC_OPMODE_DETAILS);
+  
+  if (opmodeDetailsBlocks.length > 0) {
+    const opmodeDetailsBlock = opmodeDetailsBlocks[0];
+    
+    // Find all mrc_controller blocks connected to the opmode details block
+    const controllerBlocks = findConnectedBlocksOfType(opmodeDetailsBlock, MRC_CONTROLLER);
+    
+    // Create a category for each controller
+    controllerBlocks.forEach((controllerBlock) => {
+      const controllerName = controllerBlock.getFieldValue('NAME');
+      
+      categories.push({
+        kind: 'category',
+        name: controllerName,
+        contents: [],
+      });
+    });
+  }
+  
+  return categories;
 }
 
 /**
