@@ -28,7 +28,7 @@ import { ExtendedPythonGenerator, OpModeDetails } from '../editor/extended_pytho
 import { createFieldDropdown } from '../fields/FieldDropdown';
 import { MRC_STYLE_CLASS_BLOCKS } from '../themes/styles';
 import { NONCOPYABLE_BLOCK } from './noncopyable_block';
-
+import { OUTPUT_NAME as MRC_CONTROLLER_TYPE } from './mrc_controller';
 export const BLOCK_NAME = 'mrc_opmode_details';
 
 const WARNING_ID_STEPS_OR_PERIODIC_REQUIRED = 'id_steps_or_periodic_required';
@@ -60,6 +60,11 @@ const OPMODE_DETAILS = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.DISPLAY_GROUP)
         .appendField(new Blockly.FieldTextInput(''), 'GROUP');
+
+    //TODO(AGS): This should only be added if the opmode type is not Auto
+    this.appendStatementInput('CONTROLLERS')
+        .appendField(Blockly.Msg.MRC_CONTROLLERS)
+        .setCheck(MRC_CONTROLLER_TYPE);
 
     this.getField('TYPE')?.setTooltip(Blockly.Msg.OPMODE_TYPE_TOOLTIP);
     this.getField('ENABLED')?.setTooltip(Blockly.Msg.OPMODE_ENABLED_TOOLTIP);
