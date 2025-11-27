@@ -205,7 +205,9 @@
             "EVENTS": "Eventos",
             "ADD_MECHANISM": "+ Mecanismo",
             "ADD_COMPONENT": "+ Componente",
+            "ADD_CONTROLLER": "+ Controlador",
             "TEST": "Prueba",
+            "DRIVER_STATION": "Estación del Conductor",
             "PAGINATION_TOTAL": "{{start}}-{{end}} de {{total}} elementos"
         },
         "WARNING":{

@@ -193,6 +193,7 @@
             "HARDWARE": "Hardware",
             "COMPONENTS": "Components",
             "ROBOT": "Robot",
+            "DRIVER_STATION": "Driver Station",
             "MECHANISMS": "Mechanisms",
             "LOGIC": "Logic",
             "LOOPS": "Loops",
@@ -204,6 +205,7 @@
             "EVENTS": "Events",
             "ADD_MECHANISM": "+ Mechanism",
             "ADD_COMPONENT": "+ Component",
+            "ADD_CONTROLLER": "+ Controller",
             "TEST": "Test",
             "PAGINATION_TOTAL": "{{start}}-{{end}} of {{total}} items"
         },
