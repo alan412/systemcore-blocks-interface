@@ -40,6 +40,15 @@ export function findConnectedBlocksOfType(block: Blockly.Block, targetType: stri
         const connectedBlock = input.connection.targetBlock();
         if (connectedBlock) {
           searchRecursive(connectedBlock);
+          
+          // For statement inputs, also traverse the chain of next blocks
+          if (input.connection.type === Blockly.ConnectionType.NEXT_STATEMENT) {
+            let nextBlock = connectedBlock.getNextBlock();
+            while (nextBlock) {
+              searchRecursive(nextBlock);
+              nextBlock = nextBlock.getNextBlock();
+            }
+          }
         }
       }
     });
