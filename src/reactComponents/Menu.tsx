@@ -20,7 +20,6 @@
  */
 import * as Antd from 'antd';
 import * as React from 'react';
-import { RcFile, UploadRequestOption } from 'rc-upload/lib/interface';
 import * as commonStorage from '../storage/common_storage';
 import * as storageNames from '../storage/names';
 import * as storageProject from '../storage/project';
@@ -59,6 +58,7 @@ export interface MenuProps {
   storage: commonStorage.Storage | null;
   setAlertErrorMessage: (message: string) => void;
   gotoTab: (tabKey: string) => void;
+  closeTab: (tabKey: string) => void;
   currentProject: storageProject.Project | null;
   setCurrentProject: (project: storageProject.Project | null) => void;
   onProjectChanged: () => Promise<void>;
@@ -367,7 +367,7 @@ export function Component(props: MenuProps): React.JSX.Element {
       URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error('Failed to download project:', error);
-      props.setAlertErrorMessage(t('DOWNLOAD_FAILED') || 'Failed to download project');
+      props.setAlertErrorMessage(t('DOWNLOAD_FAILED'));
     }
   }
 
@@ -384,14 +384,14 @@ export function Component(props: MenuProps): React.JSX.Element {
         const isBlocks = file.name.endsWith(storageNames.UPLOAD_DOWNLOAD_FILE_EXTENSION)
         if (!isBlocks) {
           // TODO: i18n
-          props.setAlertErrorMessage(file.name + ' is not a blocks file');
+          props.setAlertErrorMessage(t('UPLOAD_FILE_NOT_BLOCKS', { filename: file.name }));
           return false;
         }
         return isBlocks || Antd.Upload.LIST_IGNORE;
       },
       onChange: (_info) => {
       },
-      customRequest: (options: UploadRequestOption) => {
+      customRequest: (options) => {
         const reader = new FileReader();
         reader.onload = (event) => {
           if (!event.target) {
@@ -402,16 +402,20 @@ export function Component(props: MenuProps): React.JSX.Element {
           projectNames.forEach(projectName => {
             existingProjectNames.push(projectName);
           });
-          const file = options.file as RcFile;
+          const file = options.file as File;
           const uploadProjectName = storageProject.makeUploadProjectName(file.name, existingProjectNames);
           if (props.storage) {
             storageProject.uploadProject(props.storage, uploadProjectName, dataUrl);
           }
+          if (options.onSuccess) {
+            options.onSuccess(dataUrl);
+          }
         };
         reader.onerror = (_error) => {
           console.log('Error reading file: ' + reader.error);
-          // TODO: i18n
-          props.setAlertErrorMessage(t('UPLOAD_FAILED') || 'Failed to upload project');
+          if (options.onError) {
+            options.onError(new Error(t('UPLOAD_FAILED')));
+          }
         };
         reader.readAsDataURL(options.file as Blob);
       },
@@ -462,6 +466,7 @@ export function Component(props: MenuProps): React.JSX.Element {
         onProjectChanged={props.onProjectChanged}
         setAlertErrorMessage={props.setAlertErrorMessage}
         gotoTab={props.gotoTab}
+        closeTab={props.closeTab}
       />
       <ProjectManageModal
         noProjects={noProjects}

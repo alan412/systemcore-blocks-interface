@@ -221,6 +221,10 @@ const MECHANISM_COMPONENT_HOLDER = {
   setNameOfChildBlock(this: MechanismComponentHolderBlock, child: Blockly.Block): void {
     const otherNames: string[] = []
     this.getDescendants(true)
+        .filter(descendant =>
+            descendant.type === MRC_MECHANISM_NAME ||
+            descendant.type === MRC_COMPONENT_NAME ||
+            descendant.type === MRC_EVENT_NAME)
         .filter(descendant => descendant.id !== child.id)
         .forEach(descendant => {
           otherNames.push(descendant.getFieldValue('NAME'));
@@ -337,8 +341,11 @@ function pythonFromBlockInRobot(block: MechanismComponentHolderBlock, generator:
   const body = mechanisms + components;
   if (body) {
     code += body;
-    generator.addClassMethodDefinition('define_hardware', code);
+  } else {
+    code += generator.INDENT + 'pass\n';
   }
+
+  generator.addClassMethodDefinition('define_hardware', code);
 }
 
 function pythonFromBlockInMechanism(block: MechanismComponentHolderBlock, generator: ExtendedPythonGenerator) {
