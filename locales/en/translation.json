@@ -28,6 +28,8 @@
     "PROJECTS": "Projects",
     "SAVE": "Save",
     "DEPLOY": "Deploy",
+    "DOWNLOAD": "Download",
+    "UPLOAD": "Upload",
     "MANAGE": "Manage",
     "EXPLORER": "Explorer",
     "ROBOT": "Robot",
