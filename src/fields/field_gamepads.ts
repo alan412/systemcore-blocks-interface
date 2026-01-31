@@ -33,14 +33,15 @@ export const AXIS_FIELD_NAME = 'GAMEPAD_AXIS';
 export const EVENT_FIELD_NAME = 'GAMEPAD_EVENT';
 
 const BUTTON_CONFIG = new Map([
-    ['A', { display: 'A', method: 'getA' }],
-    ['B', { display: 'B', method: 'getB' }],
-    ['X', { display: 'X', method: 'getX' }],
-    ['Y', { display: 'Y', method: 'getY' }],
+    ['A', { display: 'A (cross)', method: 'getA' }],
+    ['B', { display: 'B (circle)', method: 'getB' }],
+    ['X', { display: 'X (square)', method: 'getX' }],
+    ['Y', { display: 'Y (triangle)', method: 'getY' }],
     ['LEFT_BUMPER', { display: 'Left Bumper', method: 'getLeftBumper' }],
     ['RIGHT_BUMPER', { display: 'Right Bumper', method: 'getRightBumper' }],
-    ['BACK', { display: 'Back', method: 'getBack' }],
-    ['START', { display: 'Start', method: 'getStart' }],
+    ['BACK', { display: 'Back (Share)', method: 'getBack' }],
+    ['START', { display: 'Start (Options)', method: 'getStart' }],
+    ['GUIDE', { display: 'Guide (PS)', method: 'getGuide' }],
     ['LEFT_STICK_BUTTON', { display: 'Left Stick Button', method: 'getLeftStickButton' }],
     ['RIGHT_STICK_BUTTON', { display: 'Right Stick Button', method: 'getRightStickButton' }]
 ]);
