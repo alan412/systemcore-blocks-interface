@@ -25,19 +25,20 @@
  */
 
 import * as Blockly from 'blockly/core';
-import { Order, PythonGenerator } from 'blockly/python';
+import { PythonGenerator } from 'blockly/python';
 import { MRC_STYLE_DRIVER_STATION } from '../themes/styles';
 import { createFieldNumberDropdown } from '../fields/field_number_dropdown';
 
 
 export const BLOCK_NAME = 'mrc_gamepad_analog';
+const GAMEPAD_NUMBER_FIELD = 'GAMEPAD_NUM';
 
 export const setup = function() {
   Blockly.Blocks[BLOCK_NAME] = {
     init: function() {
       this.appendDummyInput()
           .appendField("Gamepad")
-          .appendField(createFieldNumberDropdown(0,7), "GAMEPAD")
+          .appendField(createFieldNumberDropdown(0,7), GAMEPAD_NUMBER_FIELD)
           .appendField(new
         Blockly.FieldDropdown([
           ['Left stick X', 'LEFT_STICK_X'],
@@ -53,10 +54,30 @@ export const setup = function() {
   };
 };
 
+function getMethodFromAxis(axis: string): string {
+  switch (axis) {
+    case 'LEFT_STICK_X':
+      return 'getLeftX';
+    case 'LEFT_STICK_Y':
+      return 'getLeftY';
+    case 'RIGHT_STICK_X':
+      return 'getRightX';
+    case 'RIGHT_STICK_Y':
+      return 'getRightY';
+    case 'LEFT_TRIGGER':
+      return 'getLeftTrigger';
+    case 'RIGHT_TRIGGER':
+      return 'getRightTrigger';
+    default:
+      return 'getLeftX';
+  }
+}
+
 export const pythonFromBlock = function(
     block: Blockly.Block,
-    generator: PythonGenerator,
+    _: PythonGenerator,
 ) {
   // TODO: Update this when the actual driver station display class is implemented
-  return '';
+  return 'DriverStation.gamepads[' + block.getFieldValue(GAMEPAD_NUMBER_FIELD) + '].' 
+          + getMethodFromAxis(block.getFieldValue('AXIS')) + '()';
 };

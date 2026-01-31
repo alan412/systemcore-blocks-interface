@@ -25,8 +25,8 @@
  */
 
 import * as Blockly from 'blockly/core';
-import { Order, PythonGenerator } from 'blockly/python';
-import { MRC_STYLE_DRIVER_STATION, MRC_STYLE_EVENT_HANDLER, MRC_STYLE_EVENTS } from '../themes/styles';
+import { PythonGenerator } from 'blockly/python';
+import { MRC_STYLE_EVENT_HANDLER, MRC_STYLE_EVENTS } from '../themes/styles';
 import { createFieldNumberDropdown } from '../fields/field_number_dropdown';
 
 
@@ -70,8 +70,10 @@ export const setup = function () {
 
 export const pythonFromBlock = function (
   block: Blockly.Block,
-  generator: PythonGenerator,
+  _: PythonGenerator,
 ) {
   // TODO: Update this when the actual driver station display class is implemented
-  return '';
+  return '# ' + block.getFieldValue("EVENT") + ' for button '
+    + block.getFieldValue("BUTTON") + ' on gamepad '
+    + block.getFieldValue("GAMEPAD") + '\n';
 };

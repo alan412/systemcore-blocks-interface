@@ -25,19 +25,20 @@
  */
 
 import * as Blockly from 'blockly/core';
-import { Order, PythonGenerator } from 'blockly/python';
+import { PythonGenerator } from 'blockly/python';
 import { MRC_STYLE_DRIVER_STATION } from '../themes/styles';
 import { createFieldNumberDropdown } from '../fields/field_number_dropdown';
 
 
 export const BLOCK_NAME = 'mrc_gamepad_boolean';
+const GAMEPAD_NUMBER_FIELD = 'GAMEPAD_NUM';
 
 export const setup = function() {
   Blockly.Blocks[BLOCK_NAME] = {
     init: function() {
       this.appendDummyInput()
           .appendField("Gamepad")
-          .appendField(createFieldNumberDropdown(0,7), "GAMEPAD")
+          .appendField(createFieldNumberDropdown(0,7), GAMEPAD_NUMBER_FIELD)
           .appendField(new
         Blockly.FieldDropdown([
           ['A', 'A'],
@@ -62,10 +63,50 @@ export const setup = function() {
   };
 };
 
+function getMethodFromButton(button: string): string {
+  switch (button) {
+    case 'A':
+      return 'getA';
+    case 'B':
+      return 'getB';
+    case 'X':
+      return 'getX';
+    case 'Y':
+      return 'getY';
+    case 'LEFT_BUMPER':
+      return 'getLeftBumper';
+    case 'RIGHT_BUMPER':
+      return 'getRightBumper';
+    case 'BACK':
+      return 'getBack';
+    case 'START':
+      return 'getStart';
+    case 'LEFT_STICK_BUTTON':
+      return 'getLeftStickButton';
+    case 'RIGHT_STICK_BUTTON':
+      return 'getRightStickButton';
+    default:
+      return '';
+  }
+}
+
 export const pythonFromBlock = function(
     block: Blockly.Block,
-    generator: PythonGenerator,
+    _: PythonGenerator,
 ) {
   // TODO: Update this when the actual driver station display class is implemented
-  return '';
-};
+  let code = 'DriverStation.gamepads[' + block.getFieldValue(GAMEPAD_NUMBER_FIELD) + '].' 
+          + getMethodFromButton(block.getFieldValue('BUTTON'));
+    switch (block.getFieldValue('ACTION')) {
+      case 'IS_DOWN':
+        code += '';
+        break;
+      case 'WAS_PRESSED':
+        code += 'WasPressed';
+        break;
+      case 'WAS_RELEASED':
+        code += 'WasReleased';
+        break;
+    }
+    return code + '()'
+}
