@@ -66,6 +66,10 @@ const EVENT_CONFIG = new Map([
     ['GAMEPAD_EVENT_CHANGED', { display: 'On Changed' }]
 ]);
 
+export function createTitleField(): Blockly.Field {
+    return new Blockly.FieldLabel('Gamepad');   
+}
+
 export function createPortField(): Blockly.Field {
     return createFieldNumberDropdown(MIN_GAMEPAD_PORT, MAX_GAMEPAD_PORT)
 }

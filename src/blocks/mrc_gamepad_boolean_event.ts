@@ -37,7 +37,7 @@ export const setup = function () {
       this.appendDummyInput()
         .appendField(Gamepad.createEventField(), Gamepad.EVENT_FIELD_NAME);
       this.appendDummyInput()
-        .appendField("Gamepad")
+        .appendField(Gamepad.createTitleField())
         .appendField(Gamepad.createPortField(), Gamepad.PORT_FIELD_NAME)
         .appendField(Gamepad.createButtonField(), Gamepad.BUTTON_FIELD_NAME)
       this.setOutput(false);

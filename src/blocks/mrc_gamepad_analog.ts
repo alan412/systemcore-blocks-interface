@@ -36,7 +36,7 @@ export const setup = function() {
   Blockly.Blocks[BLOCK_NAME] = {
     init: function() {
       this.appendDummyInput()
-          .appendField("Gamepad")
+          .appendField(Gamepad.createTitleField())
           .appendField(Gamepad.createPortField(), Gamepad.PORT_FIELD_NAME)
           .appendField(Gamepad.createAnalogAxisField(), Gamepad.AXIS_FIELD_NAME);
       this.setOutput(true, 'Number');
