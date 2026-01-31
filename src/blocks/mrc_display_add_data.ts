@@ -35,8 +35,7 @@ export const setup = function() {
   Blockly.Blocks[BLOCK_NAME] = {
     init: function() {
       this.appendDummyInput()
-          .appendField(Blockly.Msg.CALL)
-          .appendField("display.add_data");
+          .appendField("Display.add_data");
       this.appendValueInput("CAPTION")
           .setCheck("String")
           .setAlign(Blockly.inputs.Align.RIGHT)
