@@ -5,6 +5,7 @@ import { Editor } from '../editor/editor';
 import { BLOCK_NAME as MRC_DISPLAY_ADD_DATA  } from '../blocks/mrc_display_add_data';
 import { BLOCK_NAME as MRC_GAMEPAD_BOOLEAN  } from '../blocks/mrc_gamepad_boolean';
 import { BLOCK_NAME as MRC_GAMEPAD_ANALOG  } from '../blocks/mrc_gamepad_analog';
+import { BLOCK_NAME as MRC_GAMEPAD_BOOLEAN_EVENT  } from '../blocks/mrc_gamepad_boolean_event';
 
 export function getDriverStationCategory(editor: Editor): toolboxItems.Category {
     return new toolboxItems.Category(
@@ -30,6 +31,8 @@ function getDriverStationGamepadsCategory(editor: Editor): toolboxItems.Category
               [
                 new toolboxItems.Block(MRC_GAMEPAD_BOOLEAN, null, null, null),
                 new toolboxItems.Block(MRC_GAMEPAD_ANALOG, null, null, null),
+                new toolboxItems.Label("Events"),
+                new toolboxItems.Block(MRC_GAMEPAD_BOOLEAN_EVENT, null, null, null),
               ],
               toolboxItems.ExpandedState.EXPANDED);
 }
