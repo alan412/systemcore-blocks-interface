@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 Porpoiseful LLC
+ * Copyright 2026 Porpoiseful LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,7 @@
 import * as Blockly from 'blockly/core';
 import { PythonGenerator } from 'blockly/python';
 import { MRC_STYLE_EVENT_HANDLER, MRC_STYLE_EVENTS } from '../themes/styles';
-import { createFieldNumberDropdown } from '../fields/field_number_dropdown';
-
+import * as Gamepad from '../fields/field_gamepads';
 
 export const BLOCK_NAME = 'mrc_gamepad_boolean_event';
 
@@ -36,27 +35,11 @@ export const setup = function () {
   Blockly.Blocks[BLOCK_NAME] = {
     init: function () {
       this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([
-          ['On Pressed', 'GAMEPAD_EVENT_PRESSED'],
-          ['On Released', 'GAMEPAD_EVENT_RELEASED'],
-          ['On Changed', 'GAMEPAD_EVENT_CHANGED']
-        ]), "EVENT");
+        .appendField(Gamepad.createEventField(), Gamepad.EVENT_FIELD_NAME);
       this.appendDummyInput()
         .appendField("Gamepad")
-        .appendField(createFieldNumberDropdown(0, 7), "GAMEPAD")
-        .appendField(new
-          Blockly.FieldDropdown([
-            ['A', 'A'],
-            ['B', 'B'],
-            ['X', 'X'],
-            ['Y', 'Y'],
-            ['Left Bumper', 'LEFT_BUMPER'],
-            ['Right Bumper', 'RIGHT_BUMPER'],
-            ['Back', 'BACK'],
-            ['Start', 'START'],
-            ['Left Stick Button', 'LEFT_STICK_BUTTON'],
-            ['Right Stick Button', 'RIGHT_STICK_BUTTON']
-          ]), "BUTTON");
+        .appendField(Gamepad.createPortField(), Gamepad.PORT_FIELD_NAME)
+        .appendField(Gamepad.createButtonField(), Gamepad.BUTTON_FIELD_NAME)
       this.setOutput(false);
       this.setStyle(MRC_STYLE_EVENT_HANDLER);
       this.appendStatementInput('STACK').appendField('');
@@ -73,7 +56,7 @@ export const pythonFromBlock = function (
   _: PythonGenerator,
 ) {
   // TODO: Update this when the actual driver station display class is implemented
-  return '# ' + block.getFieldValue("EVENT") + ' for button '
-    + block.getFieldValue("BUTTON") + ' on gamepad '
-    + block.getFieldValue("GAMEPAD") + '\n';
+  return '# ' + block.getFieldValue(Gamepad.EVENT_FIELD_NAME) + ' for button '
+    + block.getFieldValue(Gamepad.BUTTON_FIELD_NAME) + ' on gamepad '
+    + block.getFieldValue(Gamepad.PORT_FIELD_NAME) + '\n';
 };
