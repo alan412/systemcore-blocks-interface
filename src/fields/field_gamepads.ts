@@ -33,46 +33,46 @@ export const AXIS_FIELD_NAME = 'GAMEPAD_AXIS';
 export const EVENT_FIELD_NAME = 'GAMEPAD_EVENT';
 
 const BUTTON_CONFIG = new Map([
-    ['A', { display: 'A (cross)', method: 'getA' }],
-    ['B', { display: 'B (circle)', method: 'getB' }],
-    ['X', { display: 'X (square)', method: 'getX' }],
-    ['Y', { display: 'Y (triangle)', method: 'getY' }],
-    ['DPAD_UP', { display: 'D-pad Up', method: 'getDpadUp' }],
-    ['DPAD_DOWN', { display: 'D-pad Down', method: 'getDpadDown' }],
-    ['DPAD_LEFT', { display: 'D-pad Left', method: 'getDpadLeft' }],
-    ['DPAD_RIGHT', { display: 'D-pad Right', method: 'getDpadRight' }],
-    ['LEFT_BUMPER', { display: 'Left Bumper', method: 'getLeftBumper' }],
-    ['RIGHT_BUMPER', { display: 'Right Bumper', method: 'getRightBumper' }],
-    ['BACK', { display: 'Back (Share)', method: 'getBack' }],
-    ['START', { display: 'Start (Options)', method: 'getStart' }],
-    ['GUIDE', { display: 'Guide (PS)', method: 'getGuide' }],
-    ['LEFT_STICK_BUTTON', { display: 'Left Stick Button', method: 'getLeftStickButton' }],
-    ['RIGHT_STICK_BUTTON', { display: 'Right Stick Button', method: 'getRightStickButton' }]
+    ['A', { display: () => Blockly.Msg['GAMEPAD_BUTTON_A'], method: 'getA' }],
+    ['B', { display: () => Blockly.Msg['GAMEPAD_BUTTON_B'], method: 'getB' }],
+    ['X', { display: () => Blockly.Msg['GAMEPAD_BUTTON_X'], method: 'getX' }],
+    ['Y', { display: () => Blockly.Msg['GAMEPAD_BUTTON_Y'], method: 'getY' }],
+    ['DPAD_UP', { display: () => Blockly.Msg['GAMEPAD_DPAD_UP'], method: 'getDpadUp' }],
+    ['DPAD_DOWN', { display: () => Blockly.Msg['GAMEPAD_DPAD_DOWN'], method: 'getDpadDown' }],
+    ['DPAD_LEFT', { display: () => Blockly.Msg['GAMEPAD_DPAD_LEFT'], method: 'getDpadLeft' }],
+    ['DPAD_RIGHT', { display: () => Blockly.Msg['GAMEPAD_DPAD_RIGHT'], method: 'getDpadRight' }],
+    ['LEFT_BUMPER', { display: () => Blockly.Msg['GAMEPAD_LEFT_BUMPER'], method: 'getLeftBumper' }],
+    ['RIGHT_BUMPER', { display: () => Blockly.Msg['GAMEPAD_RIGHT_BUMPER'], method: 'getRightBumper' }],
+    ['BACK', { display: () => Blockly.Msg['GAMEPAD_BACK'], method: 'getBack' }],
+    ['START', { display: () => Blockly.Msg['GAMEPAD_START'], method: 'getStart' }],
+    ['GUIDE', { display: () => Blockly.Msg['GAMEPAD_GUIDE'], method: 'getGuide' }],
+    ['LEFT_STICK_BUTTON', { display: () => Blockly.Msg['GAMEPAD_LEFT_STICK_BUTTON'], method: 'getLeftStickButton' }],
+    ['RIGHT_STICK_BUTTON', { display: () => Blockly.Msg['GAMEPAD_RIGHT_STICK_BUTTON'], method: 'getRightStickButton' }]
 ]);
 
 const AXIS_CONFIG = new Map([
-    ['LEFT_STICK_X', { display: 'Left stick X', method: 'getLeftX' }],
-    ['LEFT_STICK_Y', { display: 'Left stick Y', method: 'getLeftY' }],
-    ['RIGHT_STICK_X', { display: 'Right stick X', method: 'getRightX' }],
-    ['RIGHT_STICK_Y', { display: 'Right stick Y', method: 'getRightY' }],
-    ['LEFT_TRIGGER', { display: 'Left trigger', method: 'getLeftTrigger' }],
-    ['RIGHT_TRIGGER', { display: 'Right trigger', method: 'getRightTrigger' }]
+    ['LEFT_STICK_X', { display: () => Blockly.Msg['GAMEPAD_LEFT_STICK_X'], method: 'getLeftX' }],
+    ['LEFT_STICK_Y', { display: () => Blockly.Msg['GAMEPAD_LEFT_STICK_Y'], method: 'getLeftY' }],
+    ['RIGHT_STICK_X', { display: () => Blockly.Msg['GAMEPAD_RIGHT_STICK_X'], method: 'getRightX' }],
+    ['RIGHT_STICK_Y', { display: () => Blockly.Msg['GAMEPAD_RIGHT_STICK_Y'], method: 'getRightY' }],
+    ['LEFT_TRIGGER', { display: () => Blockly.Msg['GAMEPAD_LEFT_TRIGGER'], method: 'getLeftTrigger' }],
+    ['RIGHT_TRIGGER', { display: () => Blockly.Msg['GAMEPAD_RIGHT_TRIGGER'], method: 'getRightTrigger' }]
 ]);
 
 const ACTION_CONFIG = new Map([
-    ['IS_DOWN', { display: 'is down', suffix: '' }],
-    ['WAS_PRESSED', { display: 'Pressed', suffix: 'Pressed' }],
-    ['WAS_RELEASED', { display: 'Released', suffix: 'Released' }]
+    ['IS_DOWN', { display: () => Blockly.Msg['GAMEPAD_IS_DOWN'], suffix: '' }],
+    ['WAS_PRESSED', { display: () => Blockly.Msg['GAMEPAD_PRESSED'], suffix: 'Pressed' }],
+    ['WAS_RELEASED', { display: () => Blockly.Msg['GAMEPAD_RELEASED'], suffix: 'Released' }]
 ]);
 
 const EVENT_CONFIG = new Map([
-    ['GAMEPAD_EVENT_PRESSED', { display: 'On Pressed' }],
-    ['GAMEPAD_EVENT_RELEASED', { display: 'On Released' }],
-    ['GAMEPAD_EVENT_CHANGED', { display: 'On Changed' }]
+    ['GAMEPAD_EVENT_PRESSED', { display: () => Blockly.Msg['GAMEPAD_EVENT_PRESSED'] }],
+    ['GAMEPAD_EVENT_RELEASED', { display: () => Blockly.Msg['GAMEPAD_EVENT_RELEASED'] }],
+    ['GAMEPAD_EVENT_CHANGED', { display: () => Blockly.Msg['GAMEPAD_EVENT_CHANGED'] }]
 ]);
 
 export function createTitleField(): Blockly.Field {
-    return new Blockly.FieldLabel('Gamepad');   
+    return new Blockly.FieldLabel(Blockly.Msg['GAMEPAD']);   
 }
 
 export function createPortField(): Blockly.Field {
@@ -81,24 +81,24 @@ export function createPortField(): Blockly.Field {
 
 export function createButtonField(): Blockly.Field {
     return new Blockly.FieldDropdown(
-        Array.from(BUTTON_CONFIG.entries()).map(([key, config]) => [config.display, key])
+        Array.from(BUTTON_CONFIG.entries()).map(([key, config]) => [config.display(), key])
     )
 }
 export function createAnalogAxisField(): Blockly.Field {
     return new Blockly.FieldDropdown(
-        Array.from(AXIS_CONFIG.entries()).map(([key, config]) => [config.display, key])
+        Array.from(AXIS_CONFIG.entries()).map(([key, config]) => [config.display(), key])
     )
 }
 
 export function createActionField(): Blockly.Field {
     return new Blockly.FieldDropdown(
-        Array.from(ACTION_CONFIG.entries()).map(([key, config]) => [config.display, key])
+        Array.from(ACTION_CONFIG.entries()).map(([key, config]) => [config.display(), key])
     )
 }
 
 export function createEventField(): Blockly.Field {
     return new Blockly.FieldDropdown(
-        Array.from(EVENT_CONFIG.entries()).map(([key, config]) => [config.display, key])
+        Array.from(EVENT_CONFIG.entries()).map(([key, config]) => [config.display(), key])
     )
 }
 
