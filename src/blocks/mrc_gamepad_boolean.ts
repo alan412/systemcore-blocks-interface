@@ -55,8 +55,8 @@ export const setup = function() {
       this.appendDummyInput()
           .appendField(new Blockly.FieldDropdown([
             ['is down', 'IS_DOWN'],
-            ['was pressed', 'WAS_PRESSED'],
-            ['was released', 'WAS_RELEASED']]), 'ACTION');
+            ['Pressed', 'WAS_PRESSED'],
+            ['Released', 'WAS_RELEASED']]), 'ACTION');
       this.setOutput(true, 'Boolean');
       this.setStyle(MRC_STYLE_DRIVER_STATION);
     },
@@ -102,10 +102,10 @@ export const pythonFromBlock = function(
         code += '';
         break;
       case 'WAS_PRESSED':
-        code += 'WasPressed';
+        code += 'Pressed';
         break;
       case 'WAS_RELEASED':
-        code += 'WasReleased';
+        code += 'Released';
         break;
     }
     return code + '()'
