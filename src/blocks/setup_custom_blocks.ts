@@ -22,6 +22,8 @@ import * as Steps from './mrc_steps';
 import * as StepContainer from './mrc_step_container';
 import * as JumpToStep from './mrc_jump_to_step';
 import * as DisplayAddData from './mrc_display_add_data';
+import * as GamepadBoolean from './mrc_gamepad_boolean';
+import * as GamepadAnalog from './mrc_gamepad_analog';
 
 const customBlocks = [
   CallPythonFunction,
@@ -46,7 +48,9 @@ const customBlocks = [
   Steps,
   StepContainer,
   JumpToStep,
-  DisplayAddData
+  DisplayAddData,
+  GamepadBoolean,
+  GamepadAnalog
 ];
 
 export const setup = function(forBlock: any) {
