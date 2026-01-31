@@ -24,7 +24,7 @@ import * as Blockly from 'blockly/core';
 import { createFieldNumberDropdown } from './field_number_dropdown';
 
 const MIN_GAMEPAD_PORT = 0;
-const MAX_GAMEPAD_PORT = 7;
+const MAX_GAMEPAD_PORT = 5;
 
 export const PORT_FIELD_NAME = 'GAMEPAD_PORT';
 export const BUTTON_FIELD_NAME = 'GAMEPAD_BUTTON';
