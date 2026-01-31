@@ -166,8 +166,8 @@
     "FIRE": "הפעל",
     "GET": "קבל",
     "SET": "הגדר",
-    "TO": "ל",
-    "STEPS": "צעדים",
+    "TO": "ל",    "CAPTION": "כיתוב",
+    "VALUE": "ערך",    "STEPS": "צעדים",
     "REPEAT_UNTIL": "לחזור על כך עד",
     "JUMP_TO": "לקפוץ אל",
     "CUSTOM_EVENTS_LABEL": "אירועים מותאמים אישית",
@@ -179,6 +179,7 @@
     "TOOLTIP": {
       "EVALUATE_BUT_IGNORE_RESULT": "מבצע את הבלוק המחובר ומתעלם מהתוצאה. מאפשר לקרוא לפונקציה מבלי להשתמש בערך שהיא מחזירה.",
       "NONE": "מחזיר כלום.",
+      "DISPLAY_ADD_DATA": "הוסף נתונים עם כיתוב לתצוגת תחנת הנהג.",
       "OPMODE_TYPE": "איזה סוג אופמוד זה",
       "OPMODE_ENABLED": "האם האופמוד מוצג באפליקציית ה־Driver Station",
       "OPMODE_NAME": "השם שמוצג באפליקציית ה־Driver Station. אם ריק, ישתמש בשם הכיתה.",
@@ -221,6 +222,9 @@
       "EVENTS": "אירועים",
       "ADD_MECHANISM": "+ מנגנון",
       "ADD_COMPONENT": "+ רכיב",
+      "DRIVER_STATION": "תחנת נהג",
+      "DRIVER_STATION_DISPLAY": "תצוגה",
+      "DRIVER_STATION_GAMEPADS": "בקרי משחק",
       "TEST": "בדיקה",
             "PAGINATION_TOTAL": "{{start}}-{{end}} מתוך {{total}} פריטים"
     },

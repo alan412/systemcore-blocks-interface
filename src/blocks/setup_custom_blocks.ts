@@ -21,6 +21,7 @@ import * as SetPythonVariable from './mrc_set_python_variable';
 import * as Steps from './mrc_steps';
 import * as StepContainer from './mrc_step_container';
 import * as JumpToStep from './mrc_jump_to_step';
+import * as DisplayAddData from './mrc_display_add_data';
 
 const customBlocks = [
   CallPythonFunction,
@@ -44,7 +45,8 @@ const customBlocks = [
   SetPythonVariable,
   Steps,
   StepContainer,
-  JumpToStep
+  JumpToStep,
+  DisplayAddData
 ];
 
 export const setup = function(forBlock: any) {

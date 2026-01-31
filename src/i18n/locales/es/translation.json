@@ -168,6 +168,8 @@
         "GET": "obtener",
         "SET": "establecer",
         "TO": "a",
+        "CAPTION": "título",
+        "VALUE": "valor",
         "STEPS": "pasos",
         "REPEAT_UNTIL": "repetir hasta",
         "JUMP_TO": "saltar a",
@@ -180,6 +182,7 @@
         "TOOLTIP": {
             "EVALUATE_BUT_IGNORE_RESULT": "Ejecuta el bloque conectado e ignora el resultado. Te permite llamar una función e ignorar el valor de retorno.",
             "NONE": "No devuelve ninguno.",
+            "DISPLAY_ADD_DATA": "Agregar datos con un título a la pantalla de la estación del conductor.",
             "OPMODE_TYPE": "Qué tipo de OpMode es este",
             "OPMODE_ENABLED": "Si el OpMode se muestra en la Estación del Conductor",
             "OPMODE_NAME": "El nombre mostrado en la Estación del Conductor. Si está en blanco usará el nombre de la clase.",
@@ -222,6 +225,9 @@
             "EVENTS": "Eventos",
             "ADD_MECHANISM": "+ Mecanismo",
             "ADD_COMPONENT": "+ Componente",
+            "DRIVER_STATION": "Estación del Conductor",
+            "DRIVER_STATION_DISPLAY": "Pantalla",
+            "DRIVER_STATION_GAMEPADS": "Mandos de Juego",
             "TEST": "Prueba",
             "PAGINATION_TOTAL": "{{start}}-{{end}} de {{total}} elementos"
         },

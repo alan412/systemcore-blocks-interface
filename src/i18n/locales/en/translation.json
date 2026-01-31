@@ -167,6 +167,8 @@
         "GET": "get",
         "SET": "set",
         "TO": "to",
+        "CAPTION": "caption",
+        "VALUE": "value",
         "STEPS": "steps",
         "REPEAT_UNTIL": "repeat until",
         "JUMP_TO": "jump to",
@@ -179,6 +181,7 @@
         "TOOLTIP":{
             "EVALUATE_BUT_IGNORE_RESULT": "Executes the connected block and ignores the result.  Allows you to call a function and ignore the return value.",
             "NONE": "Returns None.",
+            "DISPLAY_ADD_DATA": "Add data with a caption to the driver station display.",
             "OPMODE_TYPE": "What sort of OpMode this is",
             "OPMODE_ENABLED": "Whether the OpMode is shown on Driver Station",
             "OPMODE_NAME": "The name shown on the Driver Station.  If blank will use the class name.",
@@ -221,6 +224,9 @@
             "EVENTS": "Events",
             "ADD_MECHANISM": "+ Mechanism",
             "ADD_COMPONENT": "+ Component",
+            "DRIVER_STATION": "Driver Station",
+            "DRIVER_STATION_DISPLAY": "Display",
+            "DRIVER_STATION_GAMEPADS": "Gamepads",
             "TEST": "Test",
             "PAGINATION_TOTAL": "{{start}}-{{end}} of {{total}} items"
         },
