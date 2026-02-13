@@ -36,7 +36,7 @@ import {
 import { upgrade_005_to_006 } from '../blocks/mrc_component';
 import { upgrade_008_to_009 as upgrade_component_008_to_009 } from '../blocks/mrc_component';
 import { upgrade_008_to_009 as upgrade_call_python_function_008_to_009 } from '../blocks/mrc_call_python_function';
-import { GamepadType, GamepadTypeUtils } from '../types/GamepadType';
+import { GamepadTypeUtils } from '../types/GamepadType';
 import * as workspaces from '../blocks/utils/workspaces';
 
 export const NO_VERSION = '0.0.0';
