@@ -29,6 +29,7 @@ import SiderCollapseTrigger from './reactComponents/SiderCollapseTrigger';
 import ToolboxSettingsModal from './reactComponents/ToolboxSettings';
 import ConfigGamepadsDialog from './reactComponents/ConfigGamepadsDialog';
 import { GamepadTypeUtils } from './types/GamepadType';
+import * as fieldGamepads from './fields/field_gamepads';
 import * as Tabs from './reactComponents/Tabs';
 import { TabType } from './types/TabType';
 import { AutosaveProvider } from './reactComponents/AutosaveManager';
@@ -266,7 +267,9 @@ const AppContent: React.FC<AppContentProps> = ({ project, setProject }): React.J
   /** Initializes gamepad configuration from current project. */
   const initializeGamepadConfig = (): void => {
     if (!project) {
-      setGamepadConfig(GamepadTypeUtils.getDefaultGamepadConfig());
+      const defaultConfig = GamepadTypeUtils.getDefaultGamepadConfig();
+      setGamepadConfig(defaultConfig);
+      fieldGamepads.updateGamepadConfig(defaultConfig);
       return;
     }
 
@@ -275,6 +278,7 @@ const AppContent: React.FC<AppContentProps> = ({ project, setProject }): React.J
       ? project.projectInfo.gamepadConfig 
       : GamepadTypeUtils.getDefaultGamepadConfig();
     setGamepadConfig(config);
+    fieldGamepads.updateGamepadConfig(config);
   };
 
   /** Handles gamepad configuration dialog confirmation. */
@@ -284,6 +288,7 @@ const AppContent: React.FC<AppContentProps> = ({ project, setProject }): React.J
     }
 
     setGamepadConfig(updatedConfig);
+    fieldGamepads.updateGamepadConfig(updatedConfig);
     await storageProject.updateProjectGamepadConfig(storage, project, updatedConfig);
     setConfigGamepadsDialogIsOpen(false);
   };

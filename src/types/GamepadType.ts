@@ -37,7 +37,14 @@ export enum GamepadType {
   GENERIC_HID = 'Generic HID',
 }
 
-const configMap = new Map<GamepadType, any>([
+interface GamepadConfigModule {
+  getButtonConfig: () => ReturnType<typeof GenericGamepad.getButtonConfig>;
+  getAxisConfig: () => ReturnType<typeof GenericGamepad.getAxisConfig>;
+  getRumbleConfig: () => ReturnType<typeof GenericGamepad.getRumbleConfig> | null;
+  getLEDConfig: () => ReturnType<typeof GenericGamepad.getLEDConfig> | null;
+}
+
+const configMap = new Map<GamepadType, GamepadConfigModule>([
     [GamepadType.GAMEPAD_LOGITECH_F310, LogitechF310],
     [GamepadType.GAMEPAD_PS4, PS4],
     [GamepadType.GAMEPAD_PS5, PS5],
@@ -110,22 +117,26 @@ export const GamepadTypeUtils = {
   },
 
   /** Gets button configuration for the specified gamepad type. */
-  getButtonConfig(type: GamepadType) : typeof GenericGamepad.getButtonConfig {
-    return configMap.get(type).getButtonConfig();
+  getButtonConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getButtonConfig> {
+    const config = configMap.get(type) || GenericGamepad;
+    return config.getButtonConfig();
   },
 
   /** Gets axis configuration for the specified gamepad type. */
-  getAxisConfig(type: GamepadType) : typeof GenericGamepad.getAxisConfig {
-    return configMap.get(type).getAxisConfig();
+  getAxisConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getAxisConfig> {
+    const config = configMap.get(type) || GenericGamepad;
+    return config.getAxisConfig();
   },        
 
   /** Gets rumble configuration for the specified gamepad type. */
-  getRumbleConfig(type: GamepadType) : typeof GenericGamepad.getRumbleConfig {   
-    return configMap.get(type).getRumbleConfig();
+  getRumbleConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getRumbleConfig> | null {
+    const config = configMap.get(type) || GenericGamepad;
+    return config.getRumbleConfig();
   },
 
   /** Gets LED configuration for the specified gamepad type. */
-  getLEDConfig(type: GamepadType) : typeof GenericGamepad.getLEDConfig {
-    return configMap.get(type).getLEDConfig();
+  getLEDConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getLEDConfig> | null {
+    const config = configMap.get(type) || GenericGamepad;
+    return config.getLEDConfig();
   },
 };
