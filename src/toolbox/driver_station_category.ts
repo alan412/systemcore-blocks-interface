@@ -29,6 +29,11 @@ function getDriverStationGamepadsCategory(_editor: Editor): toolboxItems.Categor
     return new toolboxItems.Category(
               Blockly.Msg['MRC_CATEGORY_DRIVER_STATION_GAMEPADS'],
               [
+                new toolboxItems.Button(
+                  Blockly.Msg['MRC_CONFIG_GAMEPADS_BUTTON'],
+                  'CONFIG_GAMEPADS_BUTTON',
+                  'primary'
+                ),
                 new toolboxItems.Block(MRC_GAMEPAD_BOOLEAN, null, null, null),
                 new toolboxItems.Block(MRC_GAMEPAD_ANALOG, null, null, null),
                 new toolboxItems.Label("Events"),

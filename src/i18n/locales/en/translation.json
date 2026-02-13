@@ -178,6 +178,7 @@
         "MORE_MECHANISM_METHODS_LABEL": "More Mechanism Methods",
         "MORE_OPMODE_METHODS_LABEL": "More OpMode Methods",
         "COMMENT_DEFAULT_TEXT": "Enter your comment here!",
+        "CONFIG_GAMEPADS_BUTTON": "⚙️ Configure Gamepads",
         "GAMEPAD": {
             "TITLE": "Gamepad",
             "BUTTON_A": "A (cross)",
