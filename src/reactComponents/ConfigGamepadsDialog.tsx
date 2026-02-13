@@ -22,17 +22,7 @@ import * as Antd from 'antd';
 import * as I18Next from 'react-i18next';
 import * as React from 'react';
 import * as storageProject from '../storage/project';
-
-/** Gamepad controller types. */
-export enum GamepadType {
-  NONE = 'None',
-  GAMEPAD_GENERIC = 'Generic Gamepad',
-  GAMEPAD_LOGITECH_F310 = 'Logitech F310',
-  GAMEPAD_XBOX = 'XBOX Gamepad',
-  GAMEPAD_PS4 = 'PlayStation 4 Gamepad',
-  GAMEPAD_PS5 = 'PlayStation 5 Gamepad',
-  GENERIC_HID = 'Generic HID',
-}
+import { GamepadType, GamepadTypeUtils } from '../types/GamepadType';
 
 /** Props for the ConfigGamepadsDialog component. */
 interface ConfigGamepadsDialogProps {
@@ -44,17 +34,6 @@ interface ConfigGamepadsDialogProps {
 
 /** Number of gamepads to configure (0-5). */
 const GAMEPAD_COUNT = 6;
-
-/** Default gamepad configuration. */
-export const getDefaultGamepadConfig = (): storageProject.GamepadConfig => {
-  const config: storageProject.GamepadConfig = {};
-  for (let i = 0; i < GAMEPAD_COUNT; i++) {
-    config[i] = GamepadType.NONE;
-  }
-  config[0] = GamepadType.GAMEPAD_LOGITECH_F310; // Default to Logitech F310 on port 0
-  config[1] = GamepadType.GAMEPAD_LOGITECH_F310; // Default to Logitech F310 on port 1
-  return config;
-};
 
 /**
  * Dialog component for configuring gamepad controller types.
@@ -90,23 +69,6 @@ export default function ConfigGamepadsDialog(props: ConfigGamepadsDialogProps) {
     props.onCancel();
   };
 
-  /** Gets icon for gamepad type. */
-  const getGamepadIcon = (type: GamepadType): string => {
-    switch (type) {
-      case GamepadType.GENERIC_HID:
-        return '🕹️'; // Joystick icon
-      case GamepadType.NONE:
-        return '❌'; // No controller        
-      case GamepadType.GAMEPAD_GENERIC:
-      case GamepadType.GAMEPAD_LOGITECH_F310:        
-      case GamepadType.GAMEPAD_XBOX:
-      case GamepadType.GAMEPAD_PS4:
-      case GamepadType.GAMEPAD_PS5:        
-      default:
-        return '🎮'; // Generic gamepad icon
-    }
-  };
-
   // Create table data source
   const tableData = Array.from({ length: GAMEPAD_COUNT }, (_, index) => ({
     key: index,
@@ -140,7 +102,7 @@ export default function ConfigGamepadsDialog(props: ConfigGamepadsDialogProps) {
             value: type,
             label: (
               <span>
-                {getGamepadIcon(type)} {type}
+                {GamepadTypeUtils.getGamepadIcon(type)} {type}
               </span>
             ),
           }))}

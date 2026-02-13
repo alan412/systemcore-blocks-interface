@@ -27,7 +27,8 @@ import Header from './reactComponents/Header';
 import * as Menu from './reactComponents/Menu';
 import SiderCollapseTrigger from './reactComponents/SiderCollapseTrigger';
 import ToolboxSettingsModal from './reactComponents/ToolboxSettings';
-import ConfigGamepadsDialog, { getDefaultGamepadConfig } from './reactComponents/ConfigGamepadsDialog';
+import ConfigGamepadsDialog from './reactComponents/ConfigGamepadsDialog';
+import { GamepadTypeUtils } from './types/GamepadType';
 import * as Tabs from './reactComponents/Tabs';
 import { TabType } from './types/TabType';
 import { AutosaveProvider } from './reactComponents/AutosaveManager';
@@ -141,7 +142,7 @@ const AppContent: React.FC<AppContentProps> = ({ project, setProject }): React.J
   const [messageApi, contextHolder] = Antd.message.useMessage();
   const [toolboxSettingsModalIsOpen, setToolboxSettingsModalIsOpen] = React.useState(false);
   const [configGamepadsDialogIsOpen, setConfigGamepadsDialogIsOpen] = React.useState(false);
-  const [gamepadConfig, setGamepadConfig] = React.useState<storageProject.GamepadConfig>(getDefaultGamepadConfig());
+  const [gamepadConfig, setGamepadConfig] = React.useState<storageProject.GamepadConfig>(GamepadTypeUtils.getDefaultGamepadConfig());
   const [tabItems, setTabItems] = React.useState<Tabs.TabItem[]>([]);
   const [isLoadingTabs, setIsLoadingTabs] = React.useState(false);
   const [shownPythonToolboxCategories, setShownPythonToolboxCategories] = React.useState<Set<string>>(new Set());
@@ -265,12 +266,14 @@ const AppContent: React.FC<AppContentProps> = ({ project, setProject }): React.J
   /** Initializes gamepad configuration from current project. */
   const initializeGamepadConfig = (): void => {
     if (!project) {
-      setGamepadConfig(getDefaultGamepadConfig());
+      setGamepadConfig(GamepadTypeUtils.getDefaultGamepadConfig());
       return;
     }
 
-    // Load from project, or use default if not set
-    const config = project.gamepadConfig || getDefaultGamepadConfig();
+    // Load from project, use default for any missing config
+    const config = Object.keys(project.projectInfo.gamepadConfig).length > 0 
+      ? project.projectInfo.gamepadConfig 
+      : GamepadTypeUtils.getDefaultGamepadConfig();
     setGamepadConfig(config);
   };
 
