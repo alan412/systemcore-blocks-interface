@@ -63,6 +63,17 @@ export const GamepadTypeUtils = {
     }
   },
 
+  /** Removes all NONE entries from gamepad config. */
+  removeNoneEntries(gamepadConfig: storageProject.GamepadConfig): storageProject.GamepadConfig {
+    const cleaned: storageProject.GamepadConfig = {};
+    for (const port in gamepadConfig) {
+      if (gamepadConfig[port] !== GamepadType.NONE) {
+        cleaned[port] = gamepadConfig[port];
+      }
+    }
+    return cleaned;
+  },
+
   /** Default gamepad configuration. */
   getDefaultGamepadConfig(): storageProject.GamepadConfig {
     const config: storageProject.GamepadConfig = {};

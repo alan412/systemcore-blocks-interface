@@ -26,6 +26,7 @@ import * as storageModule from './module';
 import * as storageModuleContent from './module_content';
 import * as storageNames from './names';
 import { upgradeProjectIfNecessary, CURRENT_VERSION, NO_VERSION } from './upgrade_project';
+import { GamepadTypeUtils } from '../types/GamepadType';
 
 // Types, constants, and functions related to projects, regardless of where the projects are stored.
 
@@ -472,6 +473,8 @@ export async function saveProjectInfo(
   if (!info.gamepadConfig) {
     info.gamepadConfig = {};
   }
+  info.gamepadConfig = GamepadTypeUtils.removeNoneEntries(info.gamepadConfig);
+  
   const projectInfoContentText = JSON.stringify(info, null, 2);
   const projectInfoPath = storageNames.makeProjectInfoPath(projectName);
   await storage.saveFile(projectInfoPath, projectInfoContentText);
