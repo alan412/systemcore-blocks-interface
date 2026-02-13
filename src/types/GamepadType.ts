@@ -19,6 +19,12 @@
  * @author alan@porpoiseful.com (Alan Smith)
  */
 import * as storageProject from '../storage/project';
+import * as GenericGamepad from './hid_devices/gamepad_generic';
+import * as GenericHID from './hid_devices/generic_hid';
+import * as PS5 from './hid_devices/gamepad_ps5';
+import * as PS4 from './hid_devices/gamepad_ps4';
+import * as LogitechF310 from './hid_devices/gamepad_logitech_f310';
+import * as Xbox from './hid_devices/gamepad_xbox';
 
 /** Gamepad controller types. */
 export enum GamepadType {
@@ -30,6 +36,16 @@ export enum GamepadType {
   GAMEPAD_PS5 = 'PlayStation 5 Gamepad',
   GENERIC_HID = 'Generic HID',
 }
+
+const configMap = new Map<GamepadType, any>([
+    [GamepadType.GAMEPAD_LOGITECH_F310, LogitechF310],
+    [GamepadType.GAMEPAD_PS4, PS4],
+    [GamepadType.GAMEPAD_PS5, PS5],
+    [GamepadType.GAMEPAD_XBOX, Xbox],
+    [GamepadType.GENERIC_HID, GenericHID],
+    [GamepadType.GAMEPAD_GENERIC, GenericGamepad],
+    [GamepadType.NONE, GenericGamepad],
+]);
 
 /** Utility functions for working with GamepadType enum. */
 export const GamepadTypeUtils = {
@@ -81,5 +97,35 @@ export const GamepadTypeUtils = {
     config[0] = GamepadType.GAMEPAD_LOGITECH_F310; // Default to Logitech F310 on port 0
     config[1] = GamepadType.GAMEPAD_LOGITECH_F310; // Default to Logitech F310 on port 1
     return config;
+  },
+
+  getPortsWithControllers(gamepadConfig: storageProject.GamepadConfig): number[] {
+    const ports: number[] = [];
+    for (const port in gamepadConfig) {
+      if (gamepadConfig[port] !== GamepadType.NONE) {
+        ports.push(Number(port));
+      }
+    }
+    return ports;
+  },
+
+  /** Gets button configuration for the specified gamepad type. */
+  getButtonConfig(type: GamepadType) : typeof GenericGamepad.getButtonConfig {
+    return configMap.get(type).getButtonConfig();
+  },
+
+  /** Gets axis configuration for the specified gamepad type. */
+  getAxisConfig(type: GamepadType) : typeof GenericGamepad.getAxisConfig {
+    return configMap.get(type).getAxisConfig();
+  },        
+
+  /** Gets rumble configuration for the specified gamepad type. */
+  getRumbleConfig(type: GamepadType) : typeof GenericGamepad.getRumbleConfig {   
+    return configMap.get(type).getRumbleConfig();
+  },
+
+  /** Gets LED configuration for the specified gamepad type. */
+  getLEDConfig(type: GamepadType) : typeof GenericGamepad.getLEDConfig {
+    return configMap.get(type).getLEDConfig();
   },
 };
