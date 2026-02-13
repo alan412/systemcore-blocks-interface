@@ -73,7 +73,7 @@ export default function ConfigGamepadsDialog(props: ConfigGamepadsDialogProps) {
   const tableData = Array.from({ length: GAMEPAD_COUNT }, (_, index) => ({
     key: index,
     gamepadId: index,
-    controllerType: (localConfig[index] as GamepadType) || GamepadType.NONE,
+    controllerType: GamepadTypeUtils.getGamepad(index, localConfig),
   }));
 
   // Define table columns
