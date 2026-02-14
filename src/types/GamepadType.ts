@@ -117,26 +117,26 @@ export const GamepadTypeUtils = {
   },
 
   /** Gets button configuration for the specified gamepad type. */
-  getButtonConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getButtonConfig> {
-    const config = configMap.get(type) || GenericGamepad;
-    return config.getButtonConfig();
+  getButtonConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getButtonConfig> | null{
+    const config = configMap.get(type);
+    return config ? config.getButtonConfig() : null;
   },
 
   /** Gets axis configuration for the specified gamepad type. */
-  getAxisConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getAxisConfig> {
-    const config = configMap.get(type) || GenericGamepad;
-    return config.getAxisConfig();
+  getAxisConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getAxisConfig> | null {
+    const config = configMap.get(type);
+    return config ? config.getAxisConfig() : null;
   },        
 
   /** Gets rumble configuration for the specified gamepad type. */
   getRumbleConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getRumbleConfig> | null {
-    const config = configMap.get(type) || GenericGamepad;
-    return config.getRumbleConfig();
+    const config = configMap.get(type);
+    return config ? config.getRumbleConfig() : null;
   },
 
   /** Gets LED configuration for the specified gamepad type. */
   getLEDConfig(type: GamepadType): ReturnType<typeof GenericGamepad.getLEDConfig> | null {
-    const config = configMap.get(type) || GenericGamepad;
-    return config.getLEDConfig();
+    const config = configMap.get(type);
+    return config ? config.getLEDConfig() : null;
   },
 };
