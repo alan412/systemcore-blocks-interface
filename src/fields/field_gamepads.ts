@@ -39,6 +39,22 @@ export function updateGamepadConfig(config: storageProject.GamepadConfig): void 
     currentGamepadConfig = config;
 }
 
+/**
+ * Gets the gamepad type for the port specified in a dropdown field's source block.
+ * @param dropdown The dropdown field to get the source block from.
+ * @returns The GamepadType for the configured port, or NONE if block is unavailable.
+ */
+function getGamepadTypeForDropdown(dropdown: Blockly.FieldDropdown) {
+    const block = dropdown.getSourceBlock();
+    if (!block) {
+        return GamepadTypeUtils.getGamepad(0, currentGamepadConfig);
+    }
+
+    const portField = block.getField(PORT_FIELD_NAME);
+    const port = portField ? Number(portField.getValue()) : 0;
+    return GamepadTypeUtils.getGamepad(port, currentGamepadConfig);
+}
+
 export const PORT_FIELD_NAME = 'GAMEPAD_PORT';
 export const BUTTON_FIELD_NAME = 'GAMEPAD_BUTTON';
 export const ACTION_FIELD_NAME = 'GAMEPAD_ACTION';
@@ -57,6 +73,7 @@ const EVENT_CONFIG = new Map([
     ['GAMEPAD_EVENT_CHANGED', { display: () => Blockly.Msg['GAMEPAD_EVENT_CHANGED'] }]
 ]);
 
+
 export function createTitleField(): Blockly.Field {
     return new Blockly.FieldLabel(Blockly.Msg['GAMEPAD']);   
 }
@@ -65,64 +82,48 @@ export function createPortField(): Blockly.Field {
     return createFieldNumberDropdown(MIN_GAMEPAD_PORT, MAX_GAMEPAD_PORT)
 }
 
-export function createButtonField(): Blockly.Field {
+/**
+ * Helper function to create a dynamic dropdown field based on gamepad configuration
+ * @param getConfig - Function to retrieve the appropriate config map for a gamepad type
+ * @returns A Blockly FieldDropdown that updates based on the selected gamepad port
+ */
+function createGamepadConfigField(
+    getConfig: (gamepadType: GamepadType) => Map<string, { display: () => string }> | null
+): Blockly.Field {
     return new Blockly.FieldDropdown(function(this: Blockly.FieldDropdown): Blockly.MenuOption[] {
         const options: Blockly.MenuOption[] = [];
 
-        // Get the source block to access the port field
-        const block = this.getSourceBlock();
-        if (!block) {
-            return options;
-        }
-
-        // Get the port number from the PORT_FIELD_NAME field
-        const portField = block.getField(PORT_FIELD_NAME);
-        const port = portField ? Number(portField.getValue()) : 0;
-
         // Get the gamepad type for this port
-        const gamepadType = GamepadTypeUtils.getGamepad(port, currentGamepadConfig);
+        const gamepadType = getGamepadTypeForDropdown(this);
 
-        // Get the button configuration for this gamepad type
-        const buttonConfig = GamepadTypeUtils.getButtonConfig(gamepadType);
+        // Get the configuration for this gamepad type
+        const config = getConfig(gamepadType);
 
         // Convert to dropdown options
-        if (buttonConfig) {
-            for (const [key, config] of buttonConfig.entries()) {
-                options.push([config.display(), key]);
+        if (config) {
+            for (const [key, configItem] of config.entries()) {
+                options.push([configItem.display(), key]);
             }
         }
+        
+        // If no options available, show disabled placeholder
+        if (options.length === 0) {
+            options.push(['---', '---']);
+            this.setEnabled(false);
+        } else {
+            this.setEnabled(true);
+        }
+        
         return options;
     });
 }
 
+export function createButtonField(): Blockly.Field {
+    return createGamepadConfigField(GamepadTypeUtils.getButtonConfig);
+}
+
 export function createAnalogAxisField(): Blockly.Field {
-    return new Blockly.FieldDropdown(function(this: Blockly.FieldDropdown): Blockly.MenuOption[] {
-        const options: Blockly.MenuOption[] = [];
-
-        // Get the source block to access the port field
-        const block = this.getSourceBlock();
-        if (!block) {
-            return options;
-        }
-
-        // Get the port number from the PORT_FIELD_NAME field
-        const portField = block.getField(PORT_FIELD_NAME);
-        const port = portField ? Number(portField.getValue()) : 0;
-
-        // Get the gamepad type for this port
-        const gamepadType = GamepadTypeUtils.getGamepad(port, currentGamepadConfig);
-
-        // Get the axis configuration for this gamepad type
-        const axisConfig = GamepadTypeUtils.getAxisConfig(gamepadType);
-
-        // Convert to dropdown options
-        if(axisConfig) {    
-            for (const [key, config] of axisConfig.entries()) {
-                options.push([config.display(), key]);
-            }
-        }
-        return options;
-    });
+    return createGamepadConfigField(GamepadTypeUtils.getAxisConfig);
 }
 
 export function createActionField(): Blockly.Field {
@@ -143,7 +144,6 @@ function getGamepad(gamepad: number): string {
 }
 
 export function methodForButton(gamepad: number, button: string, action: string): string {
-    // Get the gamepad type for this port
     const gamepadType = GamepadTypeUtils.getGamepad(gamepad, currentGamepadConfig);
     
     // Get the button configuration for this gamepad type
@@ -161,7 +161,6 @@ export function methodForButton(gamepad: number, button: string, action: string)
 }
 
 export function methodForAxis(gamepad: number, axis: string): string {
-    // Get the gamepad type for this port
     const gamepadType = GamepadTypeUtils.getGamepad(gamepad, currentGamepadConfig);
     
     // Get the axis configuration for this gamepad type
