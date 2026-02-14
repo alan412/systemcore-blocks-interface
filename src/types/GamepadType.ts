@@ -25,6 +25,7 @@ import * as PS5 from './hid_devices/gamepad_ps5';
 import * as PS4 from './hid_devices/gamepad_ps4';
 import * as LogitechF310 from './hid_devices/gamepad_logitech_f310';
 import * as Xbox from './hid_devices/gamepad_xbox';
+import * as None from './hid_devices/none';
 
 /** Gamepad controller types. */
 export enum GamepadType {
@@ -51,7 +52,7 @@ const configMap = new Map<GamepadType, GamepadConfigModule>([
     [GamepadType.GAMEPAD_XBOX, Xbox],
     [GamepadType.GENERIC_HID, GenericHID],
     [GamepadType.GAMEPAD_GENERIC, GenericGamepad],
-    [GamepadType.NONE, GenericGamepad],
+    [GamepadType.NONE, None],
 ]);
 
 /** Utility functions for working with GamepadType enum. */
