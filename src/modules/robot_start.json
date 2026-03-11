@@ -28,6 +28,43 @@
                 "editable": false,
                 "extraState": {
                     "hidePrivateComponents" : true
+                },
+                "inputs": {
+                    "COMPONENTS": {
+                        "block": {
+                            "type": "mrc_component",
+                            "fields": {
+                                "NAME": "imu",
+                                "TYPE": "wpilib.OnboardIMU"
+                            },
+                            "extraState": {
+                                "importModule": "wpilib",
+                                "tooltip": "Constructs a handle to the SystemCore onboard IMU.\n\n:param mountOrientation: the mount orientation of SystemCore to determine\n                         yaw.",
+                                "params": [
+                                    {
+                                        "name": "mount_orientation",
+                                        "type": "wpilib.OnboardIMU.MountOrientation",
+                                        "defaultValue": ""
+                                    }
+                                ]
+                            },
+                            "inputs": {
+                                "ARG0": {
+                                    "block": {
+                                        "type": "mrc_get_python_enum_value",
+                                        "fields": {
+                                            "ENUM_TYPE": "wpilib.OnboardIMU.MountOrientation",
+                                            "ENUM_VALUE": "kLandscape"
+                                        },
+                                        "extraState": {
+                                            "enumType": "wpilib.OnboardIMU.MountOrientation",
+                                            "importModule": "wpilib"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         ]
