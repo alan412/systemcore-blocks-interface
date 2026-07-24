@@ -37,13 +37,18 @@ const LIST_HEIGHT = 300;
 const ITEM_HEIGHT = 45;
 const EMPTY_HEIGHT = 60;
 
-/** Computes the mechanisms and opmodes that do not currently have an open tab. */
+/** Computes the modules (robot, mechanisms, opmodes) that do not currently have an open tab. */
 export function getHiddenModules(
     project: storageProject.Project | null, currentTabs: TabItem[]): HiddenModule[] {
   if (!project) {
     return [];
   }
 
+  const robot = [{
+    path: project.robot.modulePath,
+    title: project.robot.className,
+    type: TabType.ROBOT,
+  }];
   const mechanisms = project.mechanisms.map((m) => ({
     path: m.modulePath,
     title: m.className,
@@ -55,7 +60,7 @@ export function getHiddenModules(
     type: TabType.OPMODE,
   }));
 
-  return [...mechanisms, ...opModes].filter((item) =>
+  return [...robot, ...mechanisms, ...opModes].filter((item) =>
     !currentTabs.some((tab) => tab.key === item.path)
   );
 }

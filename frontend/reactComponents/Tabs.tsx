@@ -356,16 +356,14 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
 
   /** Handles closing other tabs except the current one. */
   const handleCloseOtherTabs = (currentTabKey: string): void => {
-    const newTabs = props.tabList.filter(
-      (tab) => tab.key === currentTabKey || tab.type === TabType.ROBOT
-    );
+    const newTabs = props.tabList.filter((tab) => tab.key === currentTabKey);
     props.setTabList(newTabs);
     setActiveKey(currentTabKey);
   };
 
   /** Gets the count of other closeable tabs. */
   const getOtherCloseableTabsCount = (tab: TabItem): number => {
-    return props.tabList.filter((t) => t.type !== TabType.ROBOT && t.key !== tab.key).length;
+    return props.tabList.filter((t) => t.key !== tab.key).length;
   };
 
   /** Handles opening the rename modal. */
@@ -416,7 +414,6 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
       key: 'close',
       label: t('CLOSE_TAB'),
       onClick: () => handleTabEdit(tab.key, 'remove'),
-      disabled: tab.type === TabType.ROBOT,
       icon: <CloseOutlined />,
     },
     {
@@ -462,7 +459,7 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
         </Antd.Dropdown>
       ),
       icon: TabTypeUtils.getIcon(tab.type),
-      closable: tab.type !== TabType.ROBOT,
+      closable: true,
       children: null,
     }));
   };
