@@ -63,11 +63,6 @@ const AppTour: React.FC<AppTourProps> = ({ isOpen, onClose }) => {
       target: tourTarget('[data-menu-id$="-manage"]'),
     },
     {
-      title: t('TOUR.EXPLORER_TITLE'),
-      description: t('TOUR.EXPLORER_DESC'),
-      target: tourTarget('[data-menu-id$="-explorer"]'),
-    },
-    {
       title: t('TOUR.SETTINGS_TITLE'),
       description: t('TOUR.SETTINGS_DESC'),
       target: tourTarget('[data-menu-id$="-settings"]'),
