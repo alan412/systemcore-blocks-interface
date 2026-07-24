@@ -33,12 +33,47 @@ import {
   CloseCircleOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core';
+import {
+  arrayMove,
+  horizontalListSortingStrategy,
+  SortableContext,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import AddTabDialog from './AddTabDialog';
 import HiddenTabsDialog, { getHiddenModules } from './HiddenTabsDialog';
 import ClassNameComponent from './ClassNameComponent';
 import CopyModuleDialog from './CopyModuleDialog';
 import { TabType, TabTypeUtils } from '../types/TabType';
 import { TabContent, TabContentRef } from './TabContent';
+
+/** Props passed by Antd.Tabs's default tab bar to each rendered tab node. */
+interface DraggableTabPaneProps extends React.HTMLAttributes<HTMLDivElement> {
+  'data-node-key': string;
+}
+
+/** Wraps a single tab bar node so it can be dragged to reorder tabs. */
+const DraggableTabNode: React.FC<DraggableTabPaneProps> = ({ children, ...props }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: props['data-node-key'],
+  });
+
+  const style: React.CSSProperties = {
+    ...props.style,
+    transform: CSS.Translate.toString(transform),
+    transition,
+    cursor: 'move',
+  };
+
+  return React.cloneElement(children as React.ReactElement<any>, {
+    ref: setNodeRef,
+    style,
+    ...attributes,
+    ...listeners,
+  });
+};
 
 /** Represents a tab item in the tab bar. */
 export interface TabItem {
@@ -220,6 +255,19 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
       }
 
       props.setTabList(newItems);
+    }
+  };
+
+  const dragSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } });
+
+  /** Handles reordering tabs after a drag-and-drop. */
+  const handleTabDragEnd = ({ active, over }: DragEndEvent): void => {
+    if (over && active.id !== over.id) {
+      const oldIndex = props.tabList.findIndex((tab) => tab.key === active.id);
+      const newIndex = props.tabList.findIndex((tab) => tab.key === over.id);
+      if (oldIndex !== -1 && newIndex !== -1) {
+        props.setTabList(arrayMove(props.tabList, oldIndex, newIndex));
+      }
     }
   };
 
@@ -546,6 +594,25 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
                 );
               })(),
             }}
+            renderTabBar={(tabBarProps, DefaultTabBar) => (
+              <DndContext sensors={[dragSensor]} onDragEnd={handleTabDragEnd}>
+                <SortableContext
+                  items={props.tabList.map((tab) => tab.key)}
+                  strategy={horizontalListSortingStrategy}
+                >
+                  <DefaultTabBar {...tabBarProps}>
+                    {(node) => (
+                      <DraggableTabNode
+                        {...(node as React.ReactElement<DraggableTabPaneProps>).props}
+                        key={node.key}
+                      >
+                        {node}
+                      </DraggableTabNode>
+                    )}
+                  </DefaultTabBar>
+                </SortableContext>
+              </DndContext>
+            )}
           />
         </div>
         <div style={{ flex: '1 1 auto', overflow: 'hidden', position: 'relative' }}>
