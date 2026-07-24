@@ -130,11 +130,12 @@
     "NO_FILES_FOUND": "Aucun fichier {{type}} trouvé",
     "DELETE": "Supprimer",
     "CANCEL": "Annuler",
-    "CLOSE_TAB": "Fermer l'onglet",
+    "CLOSE_TAB": "Fermer",
     "CLOSE_OTHER_TABS": "Fermer les autres onglets",
     "RENAME_ELLIPSIS": "Renommer...",
     "DELETE_ELLIPSIS": "Supprimer...",
     "COPY_ELLIPSIS": "Copier...",
+    "SORT_TABS": "Trier les onglets",
     "MECHANISMS": "Mécanismes",
     "OPMODES": "OpModes",
     "SAMPLES": {

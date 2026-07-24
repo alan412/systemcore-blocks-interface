@@ -130,11 +130,12 @@
     "NO_FILES_FOUND": "לא נמצאו קבצי {{type}}",
     "DELETE": "מחק",
     "CANCEL": "בטל",
-    "CLOSE_TAB": "סגור לשונית",
+    "CLOSE_TAB": "סגור",
     "CLOSE_OTHER_TABS": "סגור לשוניות אחרות",
     "RENAME_ELLIPSIS": "שנה שם...",
     "DELETE_ELLIPSIS": "מחק...",
     "COPY_ELLIPSIS": "העתק...",
+    "SORT_TABS": "סדר לשוניות",
   "MECHANISMS": "מנגנונים",
   "OPMODES": "אופמודים",
   "SAMPLES": {

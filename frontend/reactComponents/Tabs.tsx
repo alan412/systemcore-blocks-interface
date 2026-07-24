@@ -32,6 +32,7 @@ import {
   EditOutlined,
   CloseCircleOutlined,
   PlusOutlined,
+  SortAscendingOutlined,
 } from '@ant-design/icons';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core';
@@ -387,6 +388,18 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
     return props.tabList.filter((t) => t.key !== tab.key).length;
   };
 
+  /** Reorders all tabs: Robot first, then Mechanisms alphabetically, then OpModes alphabetically. */
+  const handleCleanupTabs = (): void => {
+    const robotTabs = props.tabList.filter((tab) => tab.type === TabType.ROBOT);
+    const mechanismTabs = props.tabList
+      .filter((tab) => tab.type === TabType.MECHANISM)
+      .sort((a, b) => a.title.localeCompare(b.title));
+    const opModeTabs = props.tabList
+      .filter((tab) => tab.type === TabType.OPMODE)
+      .sort((a, b) => a.title.localeCompare(b.title));
+    props.setTabList([...robotTabs, ...mechanismTabs, ...opModeTabs]);
+  };
+
   /** Handles opening the rename modal. */
   const handleOpenRenameModal = (tab: TabItem): void => {
     const currentTab = props.tabList.find((t) => t.key === tab.key);
@@ -443,6 +456,12 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
       onClick: () => handleCloseOtherTabs(tab.key),
       disabled: getOtherCloseableTabsCount(tab) === 0,
       icon: <CloseCircleOutlined />,
+    },
+    {
+      key: 'sort',
+      label: t('SORT_TABS'),
+      icon: <SortAscendingOutlined />,
+      onClick: handleCleanupTabs,
     },
     {
       key: 'rename',

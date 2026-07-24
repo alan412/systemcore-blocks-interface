@@ -125,11 +125,12 @@
     "NO_FILES_FOUND": "No se encontraron archivos de {{type}}",
     "DELETE": "Eliminar",
     "CANCEL": "Cancelar",
-    "CLOSE_TAB": "Cerrar Pestaña",
+    "CLOSE_TAB": "Cerrar",
     "CLOSE_OTHER_TABS": "Cerrar Otras Pestañas",
     "RENAME_ELLIPSIS": "Renombrar...",
     "DELETE_ELLIPSIS": "Eliminar...",
     "COPY_ELLIPSIS": "Copiar...",
+    "SORT_TABS": "Ordenar Pestañas",
     "addTabDialog": {
         "title": "Agregar Pestaña",
         "search": "Buscar..."
