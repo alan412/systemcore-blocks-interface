@@ -30,13 +30,6 @@ import { Editor } from '../editor/editor';
 import ClassNameComponent from './ClassNameComponent';
 import ImportMechanismDialog from './ImportMechanismDialog';
 
-/** Represents a module item in the dialog. */
-interface Module {
-  path: string;
-  title: string;
-  type: TabType;
-}
-
 /** Props for the AddTabDialog component. */
 interface AddTabDialogProps {
   isOpen: boolean;
@@ -44,63 +37,19 @@ interface AddTabDialogProps {
   onCancel: () => void;
   project: storageProject.Project | null;
   onProjectChanged: () => Promise<void>;
-  currentTabs: TabItem[];
   storage: commonStorage.Storage | null;
 }
 
-/** Height of the scrollable lists in pixels. */
-const LIST_HEIGHT = 200;
-const ITEM_HEIGHT = 45;
-const EMPTY_HEIGHT = 60;
-
 /**
- * Dialog component for adding new tabs to the workspace.
- * Allows users to create new modules or select from existing ones.
+ * Dialog component for adding new tabs to the workspace by creating new modules.
  */
 export default function AddTabDialog(props: AddTabDialogProps) {
   const {t} = I18Next.useTranslation();
   const { token } = Antd.theme.useToken();
   const [tabType, setTabType] = React.useState<TabType>(TabType.OPMODE);
-  const [availableItems, setAvailableItems] = React.useState<Module[]>([]);
   const [newItemName, setNewItemName] = React.useState('');
   const [copyFromProjectDialogOpen, setCopyFromProjectDialogOpen] = React.useState(false);
   const inputRef = React.useRef<Antd.InputRef>(null);
-
-  React.useEffect(() => {
-    if (!props.project) {
-      return;
-    }
-
-    // Get all modules of the selected type
-    const mechanisms = props.project.mechanisms.map((m) => ({
-      path: m.modulePath,
-      title: m.className,
-      type: TabType.MECHANISM,
-    }));
-    const opModes = props.project.opModes.map((o) => ({
-      path: o.modulePath,
-      title: o.className,
-      type: TabType.OPMODE,
-    }));
-
-    // Filter by current tab type and exclude already open tabs
-    const allItems = tabType === TabType.MECHANISM ? mechanisms : opModes;
-    const notShownItems = allItems.filter((item) =>
-      !props.currentTabs.some((tab) => tab.key === item.path)
-    );
-
-    setAvailableItems(notShownItems);
-  }, [props.project, props.currentTabs, tabType]);
-
-  /** Handles selecting an existing module. */
-  const handleSelectModule = (item: Module): void => {
-    const newTab: TabItem = {
-      key: item.path,
-      title: item.title,
-      type: item.type,
-    };
-    props.onOk(newTab);
-  };
 
   /** Handles creating a new module. */
   const handleCreateNewItem = async (): Promise<void> => {
@@ -156,10 +105,6 @@ export default function AddTabDialog(props: AddTabDialogProps) {
     }
   };
 
-  const getListHeight = (): number => {
-    return Math.max(EMPTY_HEIGHT, Math.min(LIST_HEIGHT, availableItems.length * ITEM_HEIGHT));
-  }
-
   return (
     <>
     <Antd.Modal
@@ -184,62 +129,6 @@ export default function AddTabDialog(props: AddTabDialogProps) {
           </Antd.Radio.Button>
         </Antd.Radio.Group>
 
-        <h4 style={{margin: '0 0 8px 0'}}>
-          {t('SELECT_HIDDEN')}
-        </h4>
-        <div
-          style={{
-            height: getListHeight(),
-            overflow: 'auto',
-            marginBottom: 16,
-            border: `1px solid ${token.colorBorder}`,
-            borderRadius: '6px',
-          }}
-        >
-          {availableItems.length === 0 ? (
-            <div style={{
-              padding: '20px',
-              textAlign: 'center',
-              color: token.colorTextSecondary,
-            }}>
-              {tabType === TabType.MECHANISM ? t('NO_HIDDEN_MECHANISMS') : t('NO_HIDDEN_OPMODES')}
-            </div>
-          ) : (
-            <ul style={{
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
-            }}>
-              {availableItems.map((item) => (
-                <li
-                  key={item.path}
-                  onClick={() => handleSelectModule(item)}
-                  style={{
-                    cursor: 'pointer',
-                    padding: '12px 16px',
-                    borderBottom: `1px solid ${token.colorBorderSecondary}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = token.colorBgTextHover;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
-                >
-                  <span style={{ display: 'flex', alignItems: 'center' }}>
-                    {TabTypeUtils.getIcon(item.type)}
-                  </span>
-                  <span style={{fontSize: '14px'}}>
-                    {item.title}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
         {tabType === TabType.MECHANISM && (
           <div style={{ marginBottom: 16 }}>
             <Antd.Button onClick={() => setCopyFromProjectDialogOpen(true)}>

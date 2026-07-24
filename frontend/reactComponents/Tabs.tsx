@@ -34,6 +34,7 @@ import {
   PlusOutlined,
 } from '@ant-design/icons';
 import AddTabDialog from './AddTabDialog';
+import HiddenTabsDialog, { getHiddenModules } from './HiddenTabsDialog';
 import ClassNameComponent from './ClassNameComponent';
 import CopyModuleDialog from './CopyModuleDialog';
 import { TabType, TabTypeUtils } from '../types/TabType';
@@ -81,6 +82,7 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
 
   const [activeKey, setActiveKey] = React.useState(props.tabList.length > 0 ? props.tabList[0].key : '');
   const [addTabDialogOpen, setAddTabDialogOpen] = React.useState(false);
+  const [hiddenTabsDialogOpen, setHiddenTabsDialogOpen] = React.useState(false);
   const [name, setName] = React.useState('');
   const [renameModalOpen, setRenameModalOpen] = React.useState(false);
   const [copyModalOpen, setCopyModalOpen] = React.useState(false);
@@ -227,6 +229,19 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
 
     handleTabChange(newTab.key);
     setAddTabDialogOpen(false);
+  };
+
+  /** Handles reopening one or more hidden tabs. */
+  const handleHiddenTabOk = (newTabs: TabItem[]): void => {
+    if (newTabs.length === 0) {
+      setHiddenTabsDialogOpen(false);
+      return;
+    }
+
+    props.setTabList([...props.tabList, ...newTabs]);
+
+    handleTabChange(newTabs[newTabs.length - 1].key);
+    setHiddenTabsDialogOpen(false);
   };
 
   /** Handles renaming a module tab. */
@@ -449,8 +464,15 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
         onOk={handleAddTabOk}
         project={props.project}
         onProjectChanged={props.onProjectChanged}
-        currentTabs={props.tabList}
         storage={props.storage}
+      />
+
+      <HiddenTabsDialog
+        isOpen={hiddenTabsDialogOpen}
+        onCancel={() => setHiddenTabsDialogOpen(false)}
+        onOk={handleHiddenTabOk}
+        project={props.project}
+        currentTabs={props.tabList}
       />
 
       <Antd.Modal
@@ -504,6 +526,16 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
             tabBarStyle={{ padding: 0, margin: 0 }}
             hideAdd={false}
             items={createTabItems()}
+            tabBarExtraContent={{
+              left: (
+                <Antd.Button
+                  disabled={getHiddenModules(props.project, props.tabList).length === 0}
+                  onClick={() => setHiddenTabsDialogOpen(true)}
+                >
+                  {t('HIDDEN')}
+                </Antd.Button>
+              ),
+            }}
           />
         </div>
         <div style={{ flex: '1 1 auto', overflow: 'hidden', position: 'relative' }}>
