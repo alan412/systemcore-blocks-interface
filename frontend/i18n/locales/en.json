@@ -77,6 +77,8 @@
     "HEBREW": "Hebrew",
     "HELP": "Help",
     "HIDDEN": "Hidden",
+    "TOOLTIP_HIDDEN_DISABLED": "If there were hidden tabs you could use this to show them",
+    "TOOLTIP_HIDDEN_ENABLED": "Use this to show hidden tabs",
     "SELECT_HIDDEN": "Show Hidden Tabs",
     "SHOW": "Show",
     "SHOW_HIDDEN_DESC": "Select the currently hidden tabs you would like to show.",

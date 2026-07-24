@@ -527,14 +527,24 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
             hideAdd={false}
             items={createTabItems()}
             tabBarExtraContent={{
-              left: (
-                <Antd.Button
-                  disabled={getHiddenModules(props.project, props.tabList).length === 0}
-                  onClick={() => setHiddenTabsDialogOpen(true)}
-                >
-                  {t('HIDDEN')}
-                </Antd.Button>
-              ),
+              left: (() => {
+                const hiddenTabsDisabled = getHiddenModules(props.project, props.tabList).length === 0;
+                return (
+                  <Antd.Tooltip
+                    title={hiddenTabsDisabled ? t('TOOLTIP_HIDDEN_DISABLED') : t('TOOLTIP_HIDDEN_ENABLED')}
+                    mouseEnterDelay={0}
+                  >
+                    <span style={{ marginRight: '1em', display: 'inline-block' }}>
+                      <Antd.Button
+                        disabled={hiddenTabsDisabled}
+                        onClick={() => setHiddenTabsDialogOpen(true)}
+                      >
+                        {t('HIDDEN')}
+                      </Antd.Button>
+                    </span>
+                  </Antd.Tooltip>
+                );
+              })(),
             }}
           />
         </div>

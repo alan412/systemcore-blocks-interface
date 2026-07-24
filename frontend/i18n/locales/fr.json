@@ -78,6 +78,8 @@
     "HEBREW": "Hébreu",
     "HELP": "Aide",
     "HIDDEN": "Cachés",
+    "TOOLTIP_HIDDEN_DISABLED": "S'il y avait des onglets cachés, vous pourriez utiliser ceci pour les afficher",
+    "TOOLTIP_HIDDEN_ENABLED": "Utilisez ceci pour afficher les onglets cachés",
     "SELECT_HIDDEN": "Afficher les onglets cachés",
     "SHOW": "Afficher",
     "SHOW_HIDDEN_DESC": "Sélectionnez les onglets actuellement cachés que vous souhaitez afficher.",

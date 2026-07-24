@@ -73,6 +73,8 @@
     "HEBREW": "Hebreo",
     "HELP": "Ayuda",
     "HIDDEN": "Ocultos",
+    "TOOLTIP_HIDDEN_DISABLED": "Si hubiera pestañas ocultas, podrías usar esto para mostrarlas",
+    "TOOLTIP_HIDDEN_ENABLED": "Usa esto para mostrar las pestañas ocultas",
     "SELECT_HIDDEN": "Mostrar Pestañas Ocultas",
     "SHOW": "Mostrar",
     "SHOW_HIDDEN_DESC": "Selecciona las pestañas ocultas actualmente que deseas mostrar.",
