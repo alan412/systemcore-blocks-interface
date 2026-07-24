@@ -388,8 +388,8 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
     return props.tabList.filter((t) => t.key !== tab.key).length;
   };
 
-  /** Reorders all tabs: Robot first, then Mechanisms alphabetically, then OpModes alphabetically. */
-  const handleCleanupTabs = (): void => {
+  /** Computes tab order: Robot first, then Mechanisms alphabetically, then OpModes alphabetically. */
+  const getSortedTabs = (): TabItem[] => {
     const robotTabs = props.tabList.filter((tab) => tab.type === TabType.ROBOT);
     const mechanismTabs = props.tabList
       .filter((tab) => tab.type === TabType.MECHANISM)
@@ -397,7 +397,18 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
     const opModeTabs = props.tabList
       .filter((tab) => tab.type === TabType.OPMODE)
       .sort((a, b) => a.title.localeCompare(b.title));
-    props.setTabList([...robotTabs, ...mechanismTabs, ...opModeTabs]);
+    return [...robotTabs, ...mechanismTabs, ...opModeTabs];
+  };
+
+  /** Whether sorting the tabs would actually change their order. */
+  const isTabOrderSorted = (): boolean => {
+    const sortedTabs = getSortedTabs();
+    return sortedTabs.every((tab, index) => tab.key === props.tabList[index].key);
+  };
+
+  /** Reorders all tabs: Robot first, then Mechanisms alphabetically, then OpModes alphabetically. */
+  const handleSortTabs = (): void => {
+    props.setTabList(getSortedTabs());
   };
 
   /** Handles opening the rename modal. */
@@ -461,7 +472,8 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
       key: 'sort',
       label: t('SORT_TABS'),
       icon: <SortAscendingOutlined />,
-      onClick: handleCleanupTabs,
+      disabled: isTabOrderSorted(),
+      onClick: handleSortTabs,
     },
     {
       key: 'rename',
