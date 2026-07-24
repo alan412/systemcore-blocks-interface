@@ -122,9 +122,30 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
   const [renameModalOpen, setRenameModalOpen] = React.useState(false);
   const [copyModalOpen, setCopyModalOpen] = React.useState(false);
   const [currentTab, setCurrentTab] = React.useState<TabItem | null>(null);
-  
+  const [contextMenuTabKey, setContextMenuTabKey] = React.useState<string | null>(null);
+
   // Store refs to TabContent components for each tab
   const tabContentRefs = React.useRef<Map<string, TabContentRef>>(new Map());
+
+  // Force the tab context menu closed on any outside click. Listens for 'pointerdown' rather
+  // than 'mousedown': Blockly calls preventDefault() on its own pointerdown handling within the
+  // workspace, which makes the browser suppress the compatibility 'mousedown' event entirely,
+  // so a 'mousedown' listener never sees clicks that land on the Blockly canvas. 'pointerdown'
+  // itself is never suppressed. Listening on window during the capture phase also ensures this
+  // fires before any descendant's own handler, regardless of that handler's propagation calls.
+  React.useEffect(() => {
+    if (!contextMenuTabKey) {
+      return;
+    }
+    const handleWindowPointerDown = (event: PointerEvent): void => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.ant-dropdown')) {
+        setContextMenuTabKey(null);
+      }
+    };
+    window.addEventListener('pointerdown', handleWindowPointerDown, true);
+    return () => window.removeEventListener('pointerdown', handleWindowPointerDown, true);
+  }, [contextMenuTabKey]);
 
   /** Handles tab change and updates current module. */
   const handleTabChange = async (key: string): Promise<void> => {
@@ -454,6 +475,8 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
         <Antd.Dropdown
           menu={{ items: createTabContextMenuItems(tab) }}
           trigger={['contextMenu']}
+          open={contextMenuTabKey === tab.key}
+          onOpenChange={(open) => setContextMenuTabKey(open ? tab.key : null)}
         >
           <span>{tab.title}</span>
         </Antd.Dropdown>
