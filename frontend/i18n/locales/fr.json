@@ -219,7 +219,7 @@
         "HELP_TITLE": "Aide",
         "HELP_DESC": "Trouvez plus d'informations sur l'interface de blocs, y compris cette visite guidée et des exemples de code que vous pouvez consulter ou copier dans un nouveau projet.",
         "TABS_TITLE": "Onglets",
-        "TABS_DESC": "Cette rangée affiche l'onglet Robot ainsi que les onglets Mécanismes et OpMode que vous avez créés. Appuyez sur + pour en ajouter un nouveau ou en afficher un masqué.",
+        "TABS_DESC": "Cette rangée affiche l'onglet Robot ainsi que les onglets Mécanismes et OpMode que vous avez créés. Appuyez sur + pour ajouter un nouvel onglet, ou sur Cachés pour afficher les onglets que vous avez masqués.",
         "WORKSPACE_TITLE": "Espace de travail des blocs",
         "WORKSPACE_DESC": "Faites glisser et déposez des blocs ici pour définir le comportement de votre robot. Les blocs s'assemblent comme des pièces de puzzle.",
         "CODE_PANEL_TITLE": "Code Python généré",

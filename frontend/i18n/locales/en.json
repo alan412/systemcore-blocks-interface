@@ -218,7 +218,7 @@
         "HELP_TITLE": "Help",
         "HELP_DESC": "Find more information about the blocks interface, including this tour and sample code you can browse or copy into a new project.",
         "TABS_TITLE": "Tabs",
-        "TABS_DESC": "This row shows the Robot tab and any Mechanism and OpMode tabs you have created. Press + to add a new one or show a hidden one.",
+        "TABS_DESC": "This row shows the Robot tab and any Mechanism and OpMode tabs you have created. Press + to add a new tab, or Hidden to show tabs you've hidden.",
         "WORKSPACE_TITLE": "Block Workspace",
         "WORKSPACE_DESC": "Drag and drop blocks here to define your robot's behavior. Blocks connect together like puzzle pieces.",
         "CODE_PANEL_TITLE": "Generated Python Code",
