@@ -78,14 +78,9 @@ const AppTour: React.FC<AppTourProps> = ({ isOpen, onClose }) => {
       target: tourTarget('[data-menu-id$="-help"]'),
     },
     {
-      title: t('TOUR.MECHANISM_TABS_TITLE'),
-      description: t('TOUR.MECHANISM_TABS_DESC'),
-      target: tourTarget('[data-tour="tab-row-mechanisms"]'),
-    },
-    {
-      title: t('TOUR.OPMODE_TABS_TITLE'),
-      description: t('TOUR.OPMODE_TABS_DESC'),
-      target: tourTarget('[data-tour="tab-row-opmodes"]'),
+      title: t('TOUR.TABS_TITLE'),
+      description: t('TOUR.TABS_DESC'),
+      target: tourTarget('[data-tour="tab-row"]'),
     },
     {
       title: t('TOUR.WORKSPACE_TITLE'),

@@ -46,7 +46,6 @@ interface AddTabDialogProps {
   onProjectChanged: () => Promise<void>;
   currentTabs: TabItem[];
   storage: commonStorage.Storage | null;
-  initialType?: TabType;
 }
 
 /** Height of the scrollable lists in pixels. */
@@ -61,7 +60,7 @@ const EMPTY_HEIGHT = 60;
 export default function AddTabDialog(props: AddTabDialogProps) {
   const {t} = I18Next.useTranslation();
   const { token } = Antd.theme.useToken();
-  const tabType = props.initialType ?? TabType.OPMODE;
+  const [tabType, setTabType] = React.useState<TabType>(TabType.OPMODE);
   const [availableItems, setAvailableItems] = React.useState<Module[]>([]);
   const [newItemName, setNewItemName] = React.useState('');
   const [copyFromProjectDialogOpen, setCopyFromProjectDialogOpen] = React.useState(false);
@@ -148,6 +147,15 @@ export default function AddTabDialog(props: AddTabDialogProps) {
     props.onOk(newTab);
   };
 
+  /** Handles radio button change for tab type selection. */
+  const handleTabTypeChange = (e: any): void => {
+    if (e.target.value === 'opmode') {
+      setTabType(TabType.OPMODE);
+    } else if (e.target.value === 'mechanism') {
+      setTabType(TabType.MECHANISM);
+    }
+  };
+
   const getListHeight = (): number => {
     return Math.max(EMPTY_HEIGHT, Math.min(LIST_HEIGHT, availableItems.length * ITEM_HEIGHT));
   }
@@ -155,13 +163,27 @@ export default function AddTabDialog(props: AddTabDialogProps) {
   return (
     <>
     <Antd.Modal
-      title={t('addTabDialog.titleWithType', { type: tabType === TabType.MECHANISM ? t('MECHANISM') : t('OPMODE') })}
+      title={t('addTabDialog.title')}
       open={props.isOpen}
       onCancel={props.onCancel}
       footer={null}
       afterOpenChange={(open) => { if (open) inputRef.current?.focus(); }}
     >
       <div style={{marginTop: 16}}>
+        <Antd.Radio.Group
+          value={tabType === TabType.MECHANISM ? 'mechanism' : 'opmode'}
+          buttonStyle="solid"
+          style={{marginBottom: 16}}
+          onChange={handleTabTypeChange}
+        >
+          <Antd.Radio.Button value="mechanism">
+            {TabTypeUtils.getIcon(TabType.MECHANISM)} {t('MECHANISM')}
+          </Antd.Radio.Button>
+          <Antd.Radio.Button value="opmode">
+            {TabTypeUtils.getIcon(TabType.OPMODE)} {t('OPMODE')}
+          </Antd.Radio.Button>
+        </Antd.Radio.Group>
+
         <h4 style={{margin: '0 0 8px 0'}}>
           {t('SELECT_HIDDEN')}
         </h4>

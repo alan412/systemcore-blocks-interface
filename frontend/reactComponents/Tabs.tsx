@@ -31,8 +31,6 @@ import {
   CopyOutlined,
   EditOutlined,
   CloseCircleOutlined,
-  RobotOutlined,
-  CodeOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
 import AddTabDialog from './AddTabDialog';
@@ -83,7 +81,6 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
 
   const [activeKey, setActiveKey] = React.useState(props.tabList.length > 0 ? props.tabList[0].key : '');
   const [addTabDialogOpen, setAddTabDialogOpen] = React.useState(false);
-  const [addTabDialogInitialType, setAddTabDialogInitialType] = React.useState<TabType>(TabType.MECHANISM);
   const [name, setName] = React.useState('');
   const [renameModalOpen, setRenameModalOpen] = React.useState(false);
   const [copyModalOpen, setCopyModalOpen] = React.useState(false);
@@ -224,26 +221,6 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
     }
   };
 
-  const handleRowOneEdit = (
-    targetKey: React.MouseEvent | React.KeyboardEvent | string,
-    action: 'add' | 'remove'
-  ): void => {
-    if (action === 'add') {
-      setAddTabDialogInitialType(TabType.MECHANISM);
-    }
-    handleTabEdit(targetKey, action);
-  };
-
-  const handleRowTwoEdit = (
-    targetKey: React.MouseEvent | React.KeyboardEvent | string,
-    action: 'add' | 'remove'
-  ): void => {
-    if (action === 'add') {
-      setAddTabDialogInitialType(TabType.OPMODE);
-    }
-    handleTabEdit(targetKey, action);
-  };
-
   /** Handles successful addition of new tabs. */
   const handleAddTabOk = (newTab: TabItem): void => {
     props.setTabList([...props.tabList, newTab]);
@@ -314,33 +291,18 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
     props.switchToProjectAndSelectTab(destProject, mechanism.modulePath);
   };
 
-  /** Handles closing other tabs except the current one, scoped to the same row. */
+  /** Handles closing other tabs except the current one. */
   const handleCloseOtherTabs = (currentTabKey: string): void => {
-    const currentTab = props.tabList.find((tab) => tab.key === currentTabKey);
-    if (!currentTab) return;
-    const isRow2 = currentTab.type === TabType.OPMODE;
-    const newTabs = props.tabList.filter((tab) => {
-      if (tab.key === currentTabKey) return true;
-      if (tab.type === TabType.ROBOT) return true; // Always keep ROBOT tabs
-      if (isRow2) {
-        // Keep all MECHANISM tabs (row 1)
-        return tab.type === TabType.MECHANISM;
-      } else {
-        // Keep all row 2 (OPMODE) tabs
-        return tab.type === TabType.OPMODE;
-      }
-    });
+    const newTabs = props.tabList.filter(
+      (tab) => tab.key === currentTabKey || tab.type === TabType.ROBOT
+    );
     props.setTabList(newTabs);
     setActiveKey(currentTabKey);
   };
 
-  /** Gets the count of other closeable tabs in the same row as the given tab. */
-  const getOtherCloseableTabsInRowCount = (tab: TabItem): number => {
-    if (tab.type === TabType.OPMODE) {
-      return props.tabList.filter((t) => t.type === TabType.OPMODE && t.key !== tab.key).length;
-    }
-    // Row 1: only MECHANISM tabs are closeable
-    return props.tabList.filter((t) => t.type === TabType.MECHANISM && t.key !== tab.key).length;
+  /** Gets the count of other closeable tabs. */
+  const getOtherCloseableTabsCount = (tab: TabItem): number => {
+    return props.tabList.filter((t) => t.type !== TabType.ROBOT && t.key !== tab.key).length;
   };
 
   /** Handles opening the rename modal. */
@@ -398,7 +360,7 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
       key: 'close-others',
       label: t('CLOSE_OTHER_TABS'),
       onClick: () => handleCloseOtherTabs(tab.key),
-      disabled: getOtherCloseableTabsInRowCount(tab) === 0,
+      disabled: getOtherCloseableTabsCount(tab) === 0,
       icon: <CloseCircleOutlined />,
     },
     {
@@ -424,52 +386,29 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
     },
   ];
 
-  /** Creates tab items for one tab row (no content children — content is rendered separately). */
-  const createRowTabItems = (types: TabType[]): any[] => {
-    return props.tabList
-      .filter((tab) => types.includes(tab.type))
-      .map((tab) => ({
-        key: tab.key,
-        label: (
-          <Antd.Dropdown
-            menu={{ items: createTabContextMenuItems(tab) }}
-            trigger={['contextMenu']}
-          >
-            <span>{tab.title}</span>
-          </Antd.Dropdown>
-        ),
-        closable: tab.type !== TabType.ROBOT,
-        children: null,
-      }));
+  /** Creates tab items for the Antd.Tabs component (no content children — content is rendered separately). */
+  const createTabItems = (): any[] => {
+    return props.tabList.map((tab) => ({
+      key: tab.key,
+      label: (
+        <Antd.Dropdown
+          menu={{ items: createTabContextMenuItems(tab) }}
+          trigger={['contextMenu']}
+        >
+          <span>{tab.title}</span>
+        </Antd.Dropdown>
+      ),
+      icon: TabTypeUtils.getIcon(tab.type),
+      closable: tab.type !== TabType.ROBOT,
+      children: null,
+    }));
   };
 
-  const addIcon = (type: TabType): React.JSX.Element => {
-    return (
-      <Antd.Tooltip title={t('TOOLTIP_ADD_TAB_WITH_TYPE', { type: type === TabType.MECHANISM ? t('MECHANISM') : t('OPMODE') })}>
-        <PlusOutlined />
-      </Antd.Tooltip>
-    );
-  };
-
-  const tabRowIcon = (type: TabType): React.JSX.Element => {
-    switch (type) {
-      case TabType.MECHANISM:
-        return (
-      <Antd.Tooltip title={t('MECHANISMS')}>
-        <RobotOutlined style={{ marginRight: 8 }} />
-      </Antd.Tooltip>
-        );       
-      case TabType.OPMODE:
-        return (
-      <Antd.Tooltip title={t('OPMODES')}>
-        <CodeOutlined style={{ marginRight: 8 }} />
-      </Antd.Tooltip>
-        );       
-      default:
-        return (<></>);
-    }
-  }
-    
+  const addIcon = (
+    <Antd.Tooltip title={t('TOOLTIP_ADD_TAB')}>
+      <PlusOutlined />
+    </Antd.Tooltip>
+  );
 
   // Effect to ensure activeKey is valid when tab list changes
   React.useEffect(() => {
@@ -512,7 +451,6 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
         onProjectChanged={props.onProjectChanged}
         currentTabs={props.tabList}
         storage={props.storage}
-        initialType={addTabDialogInitialType}
       />
 
       <Antd.Modal
@@ -555,32 +493,17 @@ export const Component = React.forwardRef<TabsRef, TabsProps>((props, ref): Reac
       />
 
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <div data-tour="tab-row-mechanisms">
+        <div data-tour="tab-row">
           <Antd.Tabs
-            addIcon={addIcon(TabType.MECHANISM)}
+            addIcon={addIcon}
             className="tabs-row"
             type="editable-card"
             onChange={handleTabChange}
-            onEdit={handleRowOneEdit}
+            onEdit={handleTabEdit}
             activeKey={activeKey}
             tabBarStyle={{ padding: 0, margin: 0 }}
             hideAdd={false}
-            items={createRowTabItems([TabType.ROBOT, TabType.MECHANISM])}
-            tabBarExtraContent={{ left: tabRowIcon(TabType.MECHANISM) }}
-          />
-        </div>
-        <div data-tour="tab-row-opmodes">
-          <Antd.Tabs
-            addIcon={addIcon(TabType.OPMODE)}
-            className="tabs-row"
-            type="editable-card"
-            onChange={handleTabChange}
-            onEdit={handleRowTwoEdit}
-            activeKey={activeKey}
-            tabBarStyle={{ padding: 0, margin: 0 }}
-            hideAdd={false}
-            items={createRowTabItems([TabType.OPMODE])}
-            tabBarExtraContent={{ left: tabRowIcon(TabType.OPMODE) }}
+            items={createTabItems()}
           />
         </div>
         <div style={{ flex: '1 1 auto', overflow: 'hidden', position: 'relative' }}>
